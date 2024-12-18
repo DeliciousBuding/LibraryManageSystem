@@ -1,0 +1,61 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "g++",
+            "command": "g++",
+            "args": [
+                "-g",
+                "${workspaceFolder}/src/*.cpp",
+                "-I${workspaceFolder}/include",
+                "-o",
+                "${workspaceFolder}/src/main.exe"
+                
+            ],
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            "group": "build"
+        },
+        {
+            "type": "cppbuild",
+            "label": "C++(LibrarySystem专用)",
+            "command": "C:\\mingw64\\bin\\g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${workspaceFolder}/src/*.cpp",
+                "-I",
+                "${workspaceFolder}/include",
+                "-o",
+                "${workspaceFolder}/src/main.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/src"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "调试器生成的任务。"
+        }
+    ],
+    "presentation": {
+        "panel": "shared"
+    }
+}

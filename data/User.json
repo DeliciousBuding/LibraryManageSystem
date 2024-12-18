@@ -1,0 +1,22 @@
+{
+    "1": {
+        "name": "Admin",
+        "password": "1",
+        "type": 1
+    },
+    "2": {
+        "name": "User2",
+        "password": "1",
+        "type": 2
+    },
+    "3": {
+        "name": "Delete",
+        "password": "123456",
+        "type": 2
+    },
+    "4": {
+        "name": "UserTest",
+        "password": "UserTest",
+        "type": 2
+    }
+}
