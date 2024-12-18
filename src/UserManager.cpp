@@ -2,6 +2,10 @@
 #include "UserManager.h"
 #include "BookManager.h"
 #include <bits/stdc++.h>
+
+#include "nlohmann/json.hpp"
+using json = nlohmann::json;
+// 重构 不再使用txt 改用json
 using namespace std;
 
 void UserManager::RegisterUser()
@@ -14,7 +18,7 @@ void UserManager::RegisterUser()
     {
         cout << "用户已存在！请直接登录" << endl;
     }
-    else // 实现登录
+    else // 实现注册
     {
         string pass1, pass2;
         cout << "请输入密码:" << endl;
@@ -27,36 +31,52 @@ void UserManager::RegisterUser()
         }
         else
         {
-            // 实现账户数量+1
-            fstream data("../data/User.txt", ios::out | ios::in);
-            string line;
-            getline(data, line);
-            int Number = stoi(line);
-            Number++;
-            data.seekp(0, ios::beg);
-            data << Number;
-            data.close();
+            fstream file("../data/User.json", ios::in | ios::out | ios::trunc);
+            if (!file.is_open())
+            {
+                cerr << "无法打开文件 User.json" << endl;
+                return;
+            }
 
-            // 写入新用户信息
-            fstream data_write("../data/User.txt", ios::out | ios::app);
+            // 读取文件内容到json对象
+            json j;
+            file >> j;
+            file.close();
+            bool flag = 1;
+            for (int i = 1; i < j.size(); i++)
+            {
+                json temp_user = j[to_string(i)];
+                if (temp_user["name"] == temp_name)
+                {
+                    flag = 0;
+                    break;
+                }
+            }
+            if (flag)
+            {
+                int current_key = (j["NumberOfUsers"]); // 实现用户数量增加
+                int key = current_key + 1;              // 获取key
+                // 有问题，因为可能有用户被删除，导致key不连续
 
-            cout << "id=" << Number << endl;
-            data_write << endl
-                       << '{' << endl;
-            data_write << "id=" << Number << endl;
-            data_write << "name=" << temp_name << endl;
-            data_write << "password=" << pass1 << endl;
-            data_write << "type=2" << endl;
-            data_write << '}' << endl;
-            data_write.close();
-
-            cout << "您已创建成功!" << endl
-                 << "请再次登录" << endl;
+                // 判断是否存在用户也为key
+                while (j.contains(to_string(key)))
+                {
+                    key++;
+                }
+                cout << "key:" << key << endl;
+                // 写入文件
+                j[to_string(key)] = {"name", temp_name, "password", pass1, "type", "2"};
+                file.seekp(0, ios::beg);
+                file << j.dump(4) << endl;
+            }
+            else
+            {
+                cout << "用户已存在！请直接登录" << endl;
+            }
+            file.close();
         }
     }
 }
-
-
 
 bool UserManager::UserFind(const string &username) // 返回登录结果
 {
