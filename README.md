@@ -1,4 +1,4 @@
-# 图书管理系统
+# 图书管理系统 HNU CS 2024
 
 ## 数据结构
 
@@ -105,7 +105,6 @@ l  价格
 
 * [ ]  第14-16周，向助教预约验收时间，进行系统演示和报告讲解
 * [ ]  源码压缩包和实验报告同步上传CG平台
-
 
 * **UserManager、BookManager 和 ReaderManager 的关系**：
   * 考虑将 `BookManager` 和 `ReaderManager` 从 `UserManager` 中分离出来，作为独立的类存在。这些管理器之间可以通过接口或抽象类进行交互，而不是直接包含对方。
