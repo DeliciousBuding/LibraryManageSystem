@@ -1,6 +1,8 @@
-// #include "UserManager.h"
+// ReaderManager.cpp
 #include <bits/stdc++.h>
 #include "ReaderManager.h"
+#include "nlohmann/json.hpp"
+using json = nlohmann::json;
 using namespace std;
 
 void ReaderManager::ReaderManagerMenu()
@@ -39,73 +41,90 @@ void ReaderManager::ReaderManagerMenu()
         }
     }
 }
+
 void ReaderManager::addReader()
 {
-
-    cout << endl;
-    cout << "添加用户" << endl;
-    cout << "请选择用户类型:" << endl
-         << "1.管理员" << endl
-         << " 2.读者" << endl;
-    int typeOfAddReader;
-    cout << "请输入您的选择：";
-    cin >> typeOfAddReader;
-    cout << "请输入用户名:";
-    string readerName;
-    cin >> readerName;
-    ifstream data("data/User.txt");
-    string line;
-    string temp_username;
-
-    bool flag = 1;
-    while (getline(data, line) && flag)
+    bool exitOfAddReader = false;
+    while (!exitOfAddReader) // 添加用户
     {
-        // cout<<'!'<<line<<endl;
-        if (line.find("name=") != string::npos)
+        cout << endl;
+        cout << "添加用户" << endl;
+        cout << "请选择用户类型:" << endl
+             << "1.管理员" << endl
+             << "2.读者" << endl
+             << "3.退出" << endl;
+        int typeOfAddReader;
+        cout << "请输入您的选择：";
+        cin >> typeOfAddReader;
+        if (typeOfAddReader == 3)
         {
-            temp_username = line.substr(line.find("=") + 1);
-            if (temp_username == readerName)
+            exitOfAddReader = true;
+            break;
+        }
+        cout << "请输入用户名:";
+        string readerName;
+        cin >> readerName;
+
+        ifstream file("../data/User.json"); // 打开JSON文件
+        if (!file.is_open())
+        {
+            cerr << "无法打开文件 User.json" << endl;
+            return;
+        }
+
+        json j;
+        file >> j; // 读取文件内容到json对象
+        file.close();
+
+        bool flag = 1;
+        for (auto it = j.begin(); it != j.end(); ++it)
+        {
+            const string &key = it.key();
+            const json &value = it.value();
+
+            if (key == "NumberOfUsers") // 跳过 NumberOfUsers 键
+                continue;
+
+            if (value["name"] == readerName) // 检查用户名是否已存在
             {
                 flag = 0;
+                break;
             }
         }
-    }
-    data.close();
-    if (flag)
-    {
-        cout << "请输入读者密码:";
-        string readerPassword;
-        cin >> readerPassword;
-        fstream data("data/User.txt", ios::out | ios::in);
-        string line;
-        getline(data, line);
-        int Number = stoi(line);
-        Number++;
-        data.seekp(0, ios::beg);
-        data << Number;
-        data.close();
 
-        // 写入新用户信息
-        fstream data_write("data/User.txt", ios::out | ios::app);
+        if (flag)
+        {
+            cout << "请输入读者密码:";
+            string readerPassword;
+            cin >> readerPassword;
 
-        cout << "id=" << Number << endl;
-        data_write << endl
-                   << '{' << endl;
-        data_write << "id=" << Number << endl;
-        data_write << "name=" << readerName << endl;
-        data_write << "password=" << readerPassword << endl;
-        data_write << "type=" << typeOfAddReader << endl;
-        data_write << '}' << endl;
-        data_write.close();
-        cout << endl;
-        cout << "您已创建成功!" << endl;
-    }
-    else
-    {
-        cout << endl;
-        cout << "用户名已存在" << endl;
+            int current_key = j["NumberOfUsers"]; // 获取当前用户数量
+            int key = current_key + 1;            // 计算新用户的key
+
+            // 判断是否存在用户也为key
+            while (j.contains(to_string(key)))
+            {
+                key++;
+            }
+
+            j["NumberOfUsers"] = key;                                                                                       // 更新用户数量
+            j[to_string(key)] = {{"name", readerName}, {"password", readerPassword}, {"type", to_string(typeOfAddReader)}}; // 添加新用户信息
+
+            ofstream file_out("../data/User.json"); // 打开文件准备写入
+            file_out << j.dump(4) << endl;          // 写入更新后的json数据
+            file_out.close();
+
+            cout << endl;
+            cout << "您已创建成功!" << endl;
+        }
+        else
+        {
+            cout << endl;
+            cout << "用户名已存在" << endl;
+        }
     }
 }
+
 void ReaderManager::deleteReader()
 {
     bool exitOfDeleteReader = false;
@@ -121,8 +140,11 @@ void ReaderManager::deleteReader()
         cout << "请输入您的选择：";
         cin >> chooseOfDeleteReader;
         string enterOfDeleteReader;
-        cout << endl;
-        cout << "请输入删除内容：";
+        if(chooseOfDeleteReader==3)
+        {
+            exitOfDeleteReader = true;
+            break;
+        }
         cin >> enterOfDeleteReader;
         switch (chooseOfDeleteReader) // 实现删除功能
         {
@@ -131,14 +153,13 @@ void ReaderManager::deleteReader()
             break;
         case 2:
             break;
-        case 3:
-            exitOfDeleteReader = true;
         default:
-            break;
+            cout<<"输入错误"<<endl;
         }
-
+        cout << endl;
+        cout << "请输入删除内容：";
         showID(enterOfDeleteReader);
-        cout<<endl;
+        cout << endl;
         if (enterOfDeleteReader == "1")
         {
             cout << "主管理员不能删除!" << endl;
@@ -152,68 +173,55 @@ void ReaderManager::deleteReader()
             deleteID(enterOfDeleteReader);
     }
 }
+
 void ReaderManager::deleteID(string id)
 {
-
-    // 删除用户信息
-
-    ifstream data_read("data/User.txt");
-    vector<string> lines;
-    string line;
-    bool foundOfdata_read = false;
-    while (getline(data_read, line))
+    ifstream file("../data/User.json"); // 打开JSON文件
+    if (!file.is_open())
     {
-        lines.push_back(line);
+        cerr << "无法打开文件 User.json" << endl;
+        return;
     }
-    data_read.close();
-    vector<string> newlines;
-    for (size_t i = 0; i < lines.size(); i++)
+
+    json j;
+    file >> j; // 读取文件内容到json对象
+    file.close();
+
+    bool found = false;
+    for (auto it = j.begin(); it != j.end(); ++it)
     {
-        if (lines[i].find("id=") != string::npos)
+        const string &key = it.key();
+        const json &value = it.value();
+
+        if (key == "NumberOfUsers") // 跳过 NumberOfUsers 键
+            continue;
+
+        if (key == id) // 找到目标用户并删除
         {
-            string temp_id = lines[i].substr(lines[i].find("=") + 1);
-            if (temp_id == id)
-            {
-                newlines.pop_back();
-                newlines.pop_back();
-                foundOfdata_read = true;
-                i += 4;
-            }
-            else
-                newlines.push_back(lines[i]);
-        }
-        else
-        {
-            newlines.push_back(lines[i]);
+            j.erase(it);
+            found = true;
+            break;
         }
     }
-    // 首先读取整个文件内容
-    if (foundOfdata_read)
+
+    if (found)
     {
-        ofstream data_write("data/User.txt");
-        for (size_t i = 0; i < newlines.size(); i++)
-        {
-            data_write << newlines[i] << endl;
-        }
-        data_write.close();
-        // NUMBER--
-        fstream data("data/User.txt", ios::out | ios::in);
-        string line;
-        getline(data, line);
-        int Number = stoi(line);
-        Number--;
-        data.seekp(0, ios::beg);
-        data << Number;
-        data.close();
+        // j["NumberOfUsers"]=j["NumberOfUsers"]-1; // 减少用户数量
+        int tempNumber = j["NumberOfUsers"];
+        tempNumber--;
+        j["NumberOfUsers"] = tempNumber;
+        ofstream file_out("../data/User.json"); // 打开文件准备写入
+        file_out << j.dump(4) << endl;          // 写入更新后的json数据
+        file_out.close();
+
         cout << "删除成功" << endl;
     }
     else
     {
         cout << "未找到该用户" << endl;
     }
-    // 将不需要的部分过滤掉
-    // 将剩余的部分重新写回文件
 }
+
 void ReaderManager::searchReader()
 {
     bool exitOfSearchReader = false;
@@ -255,6 +263,7 @@ void ReaderManager::searchReader()
         }
     }
 }
+
 void ReaderManager::modifyReader()
 {
     cout << endl;
@@ -337,31 +346,38 @@ void ReaderManager::modifyReader()
 
 void ReaderManager::modifyUsername(string target)
 {
-    ifstream data_read("data/User.txt");
-    vector<string> lines;
-    string line;
+    ifstream file("../data/User.json"); // 打开JSON文件
+    if (!file.is_open())
+    {
+        cerr << "无法打开文件 User.json" << endl;
+        return;
+    }
+
+    json j;
+    file >> j; // 读取文件内容到json对象
+    file.close();
+
     bool found = false;
     string newUsername;
     cout << "请输入新的用户名: ";
     cin >> newUsername;
 
     // 检查新用户名是否已存在
-    ifstream check_data("data/User.txt");
-    string check_line;
     bool username_exists = false;
-    while (getline(check_data, check_line))
+    for (auto it = j.begin(); it != j.end(); ++it)
     {
-        if (check_line.find("name=") != string::npos)
+        const string &key = it.key();
+        const json &value = it.value();
+
+        if (key == "NumberOfUsers") // 跳过 NumberOfUsers 键
+            continue;
+
+        if (value["name"] == newUsername)
         {
-            string existing_username = check_line.substr(check_line.find("=") + 1);
-            if (existing_username == newUsername)
-            {
-                username_exists = true;
-                break;
-            }
+            username_exists = true;
+            break;
         }
     }
-    check_data.close();
 
     if (username_exists)
     {
@@ -369,42 +385,28 @@ void ReaderManager::modifyUsername(string target)
         return;
     }
 
-    while (getline(data_read, line))
+    for (auto it = j.begin(); it != j.end(); ++it)
     {
-        if (line.find("id=") != string::npos)
+        const string &key = it.key();
+        const json &value = it.value();
+
+        if (key == "NumberOfUsers") // 跳过 NumberOfUsers 键
+            continue;
+
+        if (key == target) // 找到目标用户并修改用户名
         {
-            string temp_id = line.substr(line.find("=") + 1);
-            if (temp_id == target)
-            {
-                found = true;
-                lines.push_back("id=" + temp_id);
-                getline(data_read, line); // Skip the current name line
-                lines.push_back("name=" + newUsername);
-                getline(data_read, line); // Skip the password line
-                lines.push_back(line);
-                getline(data_read, line); // Skip the type line
-                lines.push_back(line);
-            }
-            else
-            {
-                lines.push_back(line);
-            }
-        }
-        else
-        {
-            lines.push_back(line);
+            j[key]["name"] = newUsername;
+            found = true;
+            break;
         }
     }
-    data_read.close();
 
     if (found)
     {
-        ofstream data_write("data/User.txt");
-        for (const auto &l : lines)
-        {
-            data_write << l << endl;
-        }
-        data_write.close();
+        ofstream file_out("../data/User.json"); // 打开文件准备写入
+        file_out << j.dump(4) << endl;          // 写入更新后的json数据
+        file_out.close();
+
         cout << "用户名已成功修改。" << endl;
     }
     else
@@ -415,50 +417,44 @@ void ReaderManager::modifyUsername(string target)
 
 void ReaderManager::modifyPassword(string target)
 {
-    ifstream data_read("data/User.txt");
-    vector<string> lines;
-    string line;
+    ifstream file("../data/User.json"); // 打开JSON文件
+    if (!file.is_open())
+    {
+        cerr << "无法打开文件 User.json" << endl;
+        return;
+    }
+
+    json j;
+    file >> j; // 读取文件内容到json对象
+    file.close();
+
     bool found = false;
     string newPassword;
     cout << "请输入新的密码: ";
     cin >> newPassword;
 
-    while (getline(data_read, line))
+    for (auto it = j.begin(); it != j.end(); ++it)
     {
-        if (line.find("id=") != string::npos)
+        const string &key = it.key();
+        const json &value = it.value();
+
+        if (key == "NumberOfUsers") // 跳过 NumberOfUsers 键
+            continue;
+
+        if (key == target) // 找到目标用户并修改密码
         {
-            string temp_id = line.substr(line.find("=") + 1);
-            if (temp_id == target)
-            {
-                found = true;
-                lines.push_back(line);
-                getline(data_read, line); // Skip the name line
-                lines.push_back(line);
-                getline(data_read, line); // Skip the current password line
-                lines.push_back("password=" + newPassword);
-                getline(data_read, line); // Skip the type line
-                lines.push_back(line);
-            }
-            else
-            {
-                lines.push_back(line);
-            }
-        }
-        else
-        {
-            lines.push_back(line);
+            j[key]["password"] = newPassword;
+            found = true;
+            break;
         }
     }
-    data_read.close();
 
     if (found)
     {
-        ofstream data_write("data/User.txt");
-        for (const auto &l : lines)
-        {
-            data_write << l << endl;
-        }
-        data_write.close();
+        ofstream file_out("../data/User.json"); // 打开文件准备写入
+        file_out << j.dump(4) << endl;          // 写入更新后的json数据
+        file_out.close();
+
         cout << "密码已成功修改。" << endl;
     }
     else
@@ -469,50 +465,44 @@ void ReaderManager::modifyPassword(string target)
 
 void ReaderManager::modifyType(string target)
 {
-    ifstream data_read("data/User.txt");
-    vector<string> lines;
-    string line;
+    ifstream file("../data/User.json"); // 打开JSON文件
+    if (!file.is_open())
+    {
+        cerr << "无法打开文件 User.json" << endl;
+        return;
+    }
+
+    json j;
+    file >> j; // 读取文件内容到json对象
+    file.close();
+
     bool found = false;
     string newType;
     cout << "请输入新的用户类型(1为管理员 2为读者): ";
     cin >> newType;
 
-    while (getline(data_read, line))
+    for (auto it = j.begin(); it != j.end(); ++it)
     {
-        if (line.find("id=") != string::npos)
+        const string &key = it.key();
+        const json &value = it.value();
+
+        if (key == "NumberOfUsers") // 跳过 NumberOfUsers 键
+            continue;
+
+        if (key == target) // 找到目标用户并修改用户类型
         {
-            string temp_id = line.substr(line.find("=") + 1);
-            if (temp_id == target)
-            {
-                found = true;
-                lines.push_back(line);
-                getline(data_read, line); // Skip the name line
-                lines.push_back(line);
-                getline(data_read, line); // Skip the password line
-                lines.push_back(line);
-                getline(data_read, line); // Skip the current type line
-                lines.push_back("type=" + newType);
-            }
-            else
-            {
-                lines.push_back(line);
-            }
-        }
-        else
-        {
-            lines.push_back(line);
+            j[key]["type"] = newType;
+            found = true;
+            break;
         }
     }
-    data_read.close();
 
     if (found)
     {
-        ofstream data_write("data/User.txt");
-        for (const auto &l : lines)
-        {
-            data_write << l << endl;
-        }
-        data_write.close();
+        ofstream file_out("../data/User.json"); // 打开文件准备写入
+        file_out << j.dump(4) << endl;          // 写入更新后的json数据
+        file_out.close();
+
         cout << "用户类型已成功修改。" << endl;
     }
     else
@@ -523,48 +513,42 @@ void ReaderManager::modifyType(string target)
 
 void ReaderManager::modifyPassWordToDefault(string target)
 {
-    ifstream data_read("data/User.txt");
-    vector<string> lines;
-    string line;
+    ifstream file("../data/User.json"); // 打开JSON文件
+    if (!file.is_open())
+    {
+        cerr << "无法打开文件 User.json" << endl;
+        return;
+    }
+
+    json j;
+    file >> j; // 读取文件内容到json对象
+    file.close();
+
     bool found = false;
     string defaultPassword = "123456";
 
-    while (getline(data_read, line))
+    for (auto it = j.begin(); it != j.end(); ++it)
     {
-        if (line.find("id=") != string::npos)
+        const string &key = it.key();
+        const json &value = it.value();
+
+        if (key == "NumberOfUsers") // 跳过 NumberOfUsers 键
+            continue;
+
+        if (key == target) // 找到目标用户并重置密码
         {
-            string temp_id = line.substr(line.find("=") + 1);
-            if (temp_id == target)
-            {
-                found = true;
-                lines.push_back(line);
-                getline(data_read, line); // Skip the name line
-                lines.push_back(line);
-                getline(data_read, line); // Skip the current password line
-                lines.push_back("password=" + defaultPassword);
-                getline(data_read, line); // Skip the type line
-                lines.push_back(line);
-            }
-            else
-            {
-                lines.push_back(line);
-            }
-        }
-        else
-        {
-            lines.push_back(line);
+            j[key]["password"] = defaultPassword;
+            found = true;
+            break;
         }
     }
-    data_read.close();
 
     if (found)
     {
-        ofstream data_write("data/User.txt");
-        for (const auto &l : lines)
-        {
-            data_write << l << endl;
-        }
-        data_write.close();
+        ofstream file_out("../data/User.json"); // 打开文件准备写入
+        file_out << j.dump(4) << endl;          // 写入更新后的json数据
+        file_out.close();
+
         cout << "密码已重置为默认值。" << endl;
     }
     else
@@ -572,79 +556,80 @@ void ReaderManager::modifyPassWordToDefault(string target)
         cout << "未找到该用户。" << endl;
     }
 }
+
 void ReaderManager::showID(string &id)
 {
-    ifstream data("data/User.txt");
-    string line;
-    string temp_id, TempUsername, TempPassword, TempType;
+    ifstream file("../data/User.json"); // 打开JSON文件
+    if (!file.is_open())
+    {
+        cerr << "无法打开文件 User.json" << endl;
+        return;
+    }
+
+    json j;
+    file >> j; // 读取文件内容到json对象
+    file.close();
 
     bool flag = 1;
-    while (getline(data, line) && flag)
+    for (auto it = j.begin(); it != j.end(); ++it)
     {
-        // cout<<'!'<<line<<endl;
-        if (line.find("id=") != string::npos)
+        const string &key = it.key();
+        const json &value = it.value();
+
+        if (key == "NumberOfUsers") // 跳过 NumberOfUsers 键
+            continue;
+
+        if (key == id) // 找到目标用户并显示信息
         {
-            temp_id = line.substr(line.find("=") + 1);
-            if (temp_id == id)
-            {
-                flag = 0;
-                getline(data, line);
-                // cout << line;
-                TempUsername = line.substr(line.find("=") + 1);
-                getline(data, line);
-                // cout << line;
-                TempPassword = line.substr(line.find("=") + 1);
-                getline(data, line);
-                // cout << line;
-                TempType = line.substr(line.find("=") + 1);
-            }
+            flag = 0;
+            cout << endl;
+            cout << "用户信息显示面板：" << endl;
+            cout << "用户id:" << id << endl;
+            cout << "用户名:" << value["name"] << endl;
+            cout << "用户密码:" << value["password"] << endl;
+            cout << "用户类型:" << value["type"] << " (1为管理员 2为读者)" << endl;
+            break;
         }
     }
-    data.close();
-    if (!flag)
-    {
-        cout << endl;
-        cout << "用户信息显示面板：" << endl;
-        cout << "用户id:" << id << endl;
-        cout << "用户名:" << TempUsername << endl;
-        cout << "用户密码:" << TempPassword << endl;
-        cout << "用户类型:" << TempType << " (1为管理员 2为读者)" << endl;
-    }
-    else
+
+    if (flag)
     {
         cout << "未找到该用户" << endl;
         id = "";
     }
 }
+
 void ReaderManager::getID(string &name)
 {
-    ifstream data("data/User.txt");
-    string line;
-    string temp_id, temp_username, temp_password, temp_type;
+    ifstream file("../data/User.json"); // 打开JSON文件
+    if (!file.is_open())
+    {
+        cerr << "无法打开文件 User.json" << endl;
+        return;
+    }
+
+    json j;
+    file >> j; // 读取文件内容到json对象
+    file.close();
 
     bool flag = 1;
-    while (getline(data, line) && flag)
+    for (auto it = j.begin(); it != j.end(); ++it)
     {
-        // cout<<'!'<<line<<endl;
-        if (line.find("id=") != string::npos)
+        const string &key = it.key();
+        const json &value = it.value();
+
+        if (key == "NumberOfUsers") // 跳过 NumberOfUsers 键
+            continue;
+
+        if (value["name"] == name) // 找到目标用户名并获取其id
         {
-            temp_id = line.substr(line.find("=") + 1);
-        }
-        if (line.find("name=") != string::npos)
-        {
-            temp_username = line.substr(line.find("=") + 1);
-            if (temp_username == name)
-            {
-                flag = 0;
-            }
+            flag = 0;
+            name = key;
+            break;
         }
     }
-    data.close();
-    if (!flag)
-    {
-        name = temp_id;
-    }
-    else
+
+    if (flag)
     {
         cout << endl;
         cout << "未找到该用户" << endl;

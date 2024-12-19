@@ -83,67 +83,68 @@ void UserManager::RegisterUser()
 
 bool UserManager::UserFind(const string &username) // 返回登录结果
 {
-    ifstream data("../data/User.txt");
-    string line;
-    string temp_id, temp_username, temp_password, temp_type;
-
-    bool flag = 1;
-    while (getline(data, line) && flag)
+    ifstream file("../data/User.json");
+    if (!file.is_open())
     {
-        // cout<<'!'<<line<<endl;
-        if (line.find("name=") != string::npos)
+        cerr << "无法打开文件 User.json" << endl;
+        return false;
+    }
+
+    json j;
+    file >> j;
+    
+    // 遍历 JSON 对象的所有键值对
+    for (auto it = j.begin(); it != j.end(); ++it)
+    {
+        const string &key = it.key();       // 获取键
+        const json &value = it.value();     // 获取值
+        
+        if (key == "NumberOfUsers")
+            continue; // 跳过 NumberOfUsers 键
+        
+        // 检查当前用户的用户名是否与传入的用户名匹配
+        if (value["name"] == username)
         {
-            temp_username = line.substr(line.find("=") + 1);
-            if (temp_username == username)
-            {
-                return 0;
-                flag = 0;
-            }
+            return true; // 找到用户，返回 true
         }
     }
-    return 1;
+    return false; // 未找到用户，返回 false
 }
 
 int UserManager::UserPass(const string &username, const string &password) // 返回登录结果
 {
-    ifstream data("../data/User.txt");
-    string line;
-    string temp_id, temp_username, temp_password, temp_type;
-    if (!data.is_open())
+    ifstream file("../data/User.json");
+    if (!file.is_open())
     {
-        std::cerr << "无法打开文件 ../data/User.txt" << std::endl;
-        return 0;
+        cerr << "无法打开文件 User.json" << endl;
+        return -1;
     }
-    bool flag = 1;
-    while (getline(data, line) && flag)
+
+    json j;
+    file >> j;
+    
+    // 遍历 JSON 对象的所有键值对
+    for (auto it = j.begin(); it != j.end(); ++it)
     {
-        // cout<<'!'<<line<<endl;
-        if (line.find("name=") != string::npos)
+        const string &key = it.key();       // 获取键
+        const json &value = it.value();     // 获取值
+        
+        if (key == "NumberOfUsers")
+            continue; // 跳过 NumberOfUsers 键
+        
+        // 检查当前用户的用户名是否与传入的用户名匹配
+        if (value["name"] == username)
         {
-            temp_username = line.substr(line.find("=") + 1);
-            if (temp_username == username)
+            // 检查当前用户的密码是否与传入的密码匹配
+            if (value["password"] == password)
             {
-                // cout<<"username found"<<endl;
-                getline(data, line);
-                temp_password = line.substr(line.find("=") + 1);
-                if (temp_password == password)
-                {
-                    getline(data, line);
-                    temp_type = line.substr(line.find("=") + 1);
-                    flag = 0;
-                }
+                return value["type"]; // 密码正确，返回用户类型
+            }
+            else
+            {
+                return -1; // 密码错误，返回 -1
             }
         }
     }
-
-    if (flag == 0)
-    {
-        User user;                      // 创建User结构体
-        return int(temp_type[0] - '0'); // 返回用户类型
-    }
-    return -1;
-    // 返回1 管理员
-    // 返回2 读者
-    // 返回-1 用户不存在
-    // 其他成员变量和函数
+    return -1; // 用户不存在，返回 -1
 }
