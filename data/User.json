@@ -1,5 +1,4 @@
 {
-    "NumberOfUsers": 4,
     "1": {
         "name": "Admin",
         "password": "1",
@@ -15,9 +14,15 @@
         "password": "123456",
         "type": 2
     },
-    "4":{
+    "4": {
         "name": "UserTest",
         "password": "UserTest",
         "type": 2
-    }
+    },
+    "5": {
+        "name": "User1",
+        "password": "123",
+        "type": "2"
+    },
+    "NumberOfUsers": 5
 }

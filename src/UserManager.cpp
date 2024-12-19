@@ -31,7 +31,7 @@ void UserManager::RegisterUser()
         }
         else
         {
-            fstream file("../data/User.json", ios::in | ios::out | ios::trunc);
+            fstream file("../data/User.json", ios::in | ios::out);
             if (!file.is_open())
             {
                 cerr << "无法打开文件 User.json" << endl;
@@ -41,7 +41,6 @@ void UserManager::RegisterUser()
             // 读取文件内容到json对象
             json j;
             file >> j;
-            file.close();
             bool flag = 1;
             for (int i = 1; i < j.size(); i++)
             {
@@ -63,9 +62,13 @@ void UserManager::RegisterUser()
                 {
                     key++;
                 }
+                j["NumberOfUsers"] = key;
                 cout << "key:" << key << endl;
+                cout << "temp_name:" << temp_name << endl;
+                cout << "pass1:" << pass1 << endl;
                 // 写入文件
-                j[to_string(key)] = {"name", temp_name, "password", pass1, "type", "2"};
+
+                j[to_string(key)] = {{"name", temp_name}, {"password", pass1}, {"type", "2"}};
                 file.seekp(0, ios::beg);
                 file << j.dump(4) << endl;
             }
