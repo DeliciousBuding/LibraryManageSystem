@@ -135,6 +135,7 @@ void BookManager::modifyBook()
     {
         json &book = j[bookKey];
         // 打印原图书信息
+        cout << endl;
         cout << "当前图书信息如下:" << endl;
         cout << "ID: " << book["id"] << endl;
         cout << "书名: " << book["name"] << endl;
@@ -153,6 +154,7 @@ void BookManager::modifyBook()
         double price;
         int total, current, borrow_times;
 
+        cout << endl;
         cout << "请输入新的图书ID: ";
         cin >> id;
         cout << "请输入新的书名: ";
@@ -172,6 +174,21 @@ void BookManager::modifyBook()
         cin >> current;
         cout << "请输入新的借阅次数: ";
         cin >> borrow_times;
+        cout << endl;
+        //输出修改前后的图书信息
+        cout << "修改前后图书信息如下:" << endl;
+        cout << "ID: " << book["id"] <<" -> "<<id<<endl;
+        cout << "书名: " << book["name"] <<" -> \""<<name<<'\"'<<endl;
+        cout << "ISBN/ISSN: " << book["ISBN/ISSN"] <<" -> "<<isbn_issn<<endl;
+        cout << "作者: " << book["author"] <<" -> \""<<author<<'\"'<<endl;
+        cout << "出版社: " << book["publisher"] <<" -> \""<<publisher<<'\"'<<endl;
+        cout << "价格: " << book["price"] <<" -> "<<price<<endl;
+        cout << "总量: " << book["Total"] <<" -> "<<total<<endl;
+        cout << "当前数量: " << book["Current"] <<" -> "<<current<<endl;
+        cout << "借阅次数: " << book["BorrowTimes"] <<" -> "<<borrow_times<<endl;
+        cout << endl;
+        
+
 
         // 更新图书信息
         book["id"] = id;
@@ -183,6 +200,16 @@ void BookManager::modifyBook()
         book["Total"] = total;
         book["Current"] = current;
         book["BorrowTimes"] = borrow_times;
+
+        
+        cout << "你确定要修改吗？(Y/N)" << endl;
+        char choice;
+        cin >> choice;
+        if (choice != 'y' || choice == 'Y')
+        {
+            cout << "取消修改" << endl;
+            return;
+        }
 
         // 将修改后的json对象写回文件
         ofstream outFile("../data/Book.json");
