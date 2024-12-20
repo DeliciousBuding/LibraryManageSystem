@@ -140,7 +140,7 @@ void ReaderManager::deleteReader()
         cout << "请输入您的选择：";
         cin >> chooseOfDeleteReader;
         string enterOfDeleteReader;
-        if(chooseOfDeleteReader==3)
+        if (chooseOfDeleteReader == 3)
         {
             exitOfDeleteReader = true;
             break;
@@ -154,7 +154,7 @@ void ReaderManager::deleteReader()
         case 2:
             break;
         default:
-            cout<<"输入错误"<<endl;
+            cout << "输入错误" << endl;
         }
         cout << endl;
         cout << "请输入删除内容：";

@@ -4,7 +4,7 @@
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 using namespace std;
-class Book//单本图书的类
+class Book // 单本图书的类
 {
 
     // 数据结构
@@ -17,21 +17,28 @@ class Book//单本图书的类
     string Name;
     string Author;
     string Publisher;
-    fstream file;//文件流对象，以供整个类使用
+    fstream file;   // 文件流对象，以供整个类使用
+    json Book_Json; // json对象，以供整个类使用
+
 public:
-    Book(json OpenedBook);//构造函数 
+    Book(const json &OpenedBook); // 构造函数
+
+    void ReadData(const json &OpenedBook); // 初始化数据 被所有open方法调用
     // open方法 打开并读取json文件中的数据 然后获得一个theBook对象
     void open();
-    void openId(int id);//以id为参数读取json文件 最基础，其他的open方法都是在此基础上实现的
-    void openPrice(double Price);//以价格为参数读取json文件
-    void openCode(string &BookCode);//以图书编号为参数读取json文件
-    void openName(string &Name);//以图书名称为参数读取json文件
+    void openId(int id);                        // 以id为参数读取json文件 最基础，其他的open方法都是在此基础上实现的
+    void openCode(const string &InputBookCode); // 以图书编号为参数读取json文件
+    void openName(string &Name);                // 以图书名称为参数读取json文件
 
     // 操作数据
-    void show(); // 显示数据
-    void save();// 保存数据
-    void close(); // 关闭文件
-    void setAll();//设置数据
+    void show();   // 显示数据
+    void save();   // 保存数据
+    void close();  // 关闭文件
+    void setAll(); // 设置数据
+
+    // 借阅和归还
+    void Borrow(); // 借书
+    void Return(); // 还书
 
     // Getter接口和Setter接口
     int getId() const { return id; }
