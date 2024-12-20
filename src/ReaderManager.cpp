@@ -4,6 +4,7 @@
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 using namespace std;
+
 void ReaderManager::open()
 {
     if (!file.is_open())
@@ -38,7 +39,14 @@ void ReaderManager::save()
         cerr << "文件未打开" << endl;
     }
 }
-
+string ReaderManager::getReaderID(string &name)
+{
+    for (auto it = User_json.begin(); it != User_json.end(); ++it)
+    {
+        if (it.value()["name"] == name)
+            return it.key();
+    }
+}
 void ReaderManager::ReaderManagerMenu()
 {
 
@@ -537,6 +545,8 @@ void ReaderManager::showID(string &id)
 
         if (key == id) // 找到目标用户并显示信息
         {
+            
+            
             flag = 0;
             cout << endl;
             cout << "用户信息显示面板：" << endl;
@@ -579,7 +589,4 @@ void ReaderManager::getID(string &name)
         cout << endl;
         cout << "未找到该用户" << endl;
     }
-}
-void ReaderManager::getReaderRecords(string &id)
-{
 }

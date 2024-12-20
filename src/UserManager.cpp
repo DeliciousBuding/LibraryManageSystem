@@ -2,17 +2,15 @@
 #include "UserManager.h"
 #include "BookManager.h"
 #include <bits/stdc++.h>
-
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
-// 重构 不再使用txt 改用json
 using namespace std;
 
 void UserManager::RegisterUser()
 {
     cout << endl
          << "请输入新用户名：" << endl;
-    string temp_name="";
+    string temp_name;
     cin >> temp_name;
     if (UserFind(temp_name))
     {
@@ -34,23 +32,23 @@ void UserManager::RegisterUser()
             open(); // 读到file
 
             // 读取文件内容到json对象
-            bool flag = 1;
+            bool flag = true;
 
             // 遍历查找，判断是否存在用户,过于低效
-            for (int i = 1; i < User_Json.size(); i++)
+            for (int i = 1; i <= User_Json["NumberOfUsers"]; i++)
             {
                 json temp_user = User_Json[to_string(i)];
                 if (temp_user["name"] == temp_name) // 匹配是否存在用户
                 {
-                    flag = 0;
+                    flag = false;
                     break;
                 }
             }
 
             if (flag)
             {
-                int current_key = (User_Json["NumberOfUsers"]); // 实现用户数量增加
-                int key = current_key + 1;                      // 获取key
+                int current_key = User_Json["NumberOfUsers"]; // 实现用户数量增加
+                int key = current_key + 1;                    // 获取key
                 // 有问题，因为可能有用户被删除，导致key不连续
 
                 // 判断是否存在用户也为key 获取可用的key(id号)
@@ -59,14 +57,9 @@ void UserManager::RegisterUser()
                     key++;
                 }
                 User_Json["NumberOfUsers"] = current_key + 1; // 记录用户数量
-                
-                // 测试
-                // cout << "key:" << key << endl;
-                // cout << "temp_name:" << temp_name << endl;
-                // cout << "pass1:" << pass1 << endl;
-                //  写入文件
 
-                User_Json[to_string(key)] = {{"name", temp_name}, {"password", pass1}, {"type", "2"}};
+                // 写入文件
+                User_Json[to_string(key)] = {{"id", key}, {"name", temp_name}, {"password", pass1}, {"type", "2"}, {"record", json::array()}};
                 file.seekp(0, ios::beg); // 定位文件开头
                 save();
             }
@@ -98,7 +91,7 @@ bool UserManager::UserFind(const string &username) // 返回登录结果 判断�
             return true; // 找到用户，返回 true
         }
     }
-    
+
     return false; // 未找到用户，返回 false
 }
 
@@ -121,7 +114,8 @@ int UserManager::UserPass(const string &username, const string &password) // 返
             // 检查当前用户的密码是否与传入的密码匹配
             if (value["password"] == password) // 对象中名为"password"的值与传入的密码匹配
             {
-                return value["type"]; // 密码正确，返回用户类型
+                
+                return stoi(value["type"].get<string>()); // 密码正确，返回用户类型
             }
             else
             {
@@ -131,6 +125,7 @@ int UserManager::UserPass(const string &username, const string &password) // 返
     }
     return -1; // 用户不存在，返回 -1
 }
+
 void UserManager::open()
 {
     if (!file.is_open())
@@ -144,12 +139,14 @@ void UserManager::open()
         return;
     }
 }
+
 void UserManager::close()
 {
     if (file.is_open())
         file.close();
     return;
 }
+
 void UserManager::save()
 {
     if (file.is_open())
