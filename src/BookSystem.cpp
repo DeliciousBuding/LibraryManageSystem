@@ -34,12 +34,12 @@ void Book::open()
     {
         return;
     }
-    fstream file("../data/Book.json", ios::in|ios::out);
+    file.open("../data/Book.json", ios::in | ios::out);
     if (!file.is_open())
     {
         cerr << "无法打开文件 Book.json" << endl;
-        return;
     }
+    return;
 }
 void Book::close()
 {
@@ -119,7 +119,7 @@ void Book::show()
 }
 void Book::save()
 {
-    // 将Book类的数据存入j
+    // 将Book类的数据存入Book_Json
     json tempBook;
     tempBook["BorrowTimes"] = BorrowTimes;
     tempBook["Current"] = Current;
@@ -137,10 +137,6 @@ void Book::save()
 
     cout << "数据已保存" << endl
          << endl;
-}
-void Book::close()
-{
-    file.close();
 }
 void Book::setAll()
 {

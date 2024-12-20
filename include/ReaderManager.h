@@ -2,6 +2,8 @@
 #ifndef READERMANAGER_H
 #define READERMANAGER_H
 #include <bits/stdc++.h>
+#include "nlohmann/json.hpp"
+using json = nlohmann::json;
 using namespace std;
 class ReaderManager
 {
@@ -25,6 +27,13 @@ public:
     void modifyPassWordToDefault(string target);
    
     void getReaderRecords(string &id);
+
+    void open();//打开并读取文件
+    void close();//关闭文件
+    void save();//保存文件
+    
+    json User_json;
+    fstream file;
 };
 
 #endif

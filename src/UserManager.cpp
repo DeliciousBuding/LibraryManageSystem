@@ -12,9 +12,9 @@ void UserManager::RegisterUser()
 {
     cout << endl
          << "请输入新用户名：" << endl;
-    string temp_name;
+    string temp_name="";
     cin >> temp_name;
-    if (!UserFind(temp_name))
+    if (UserFind(temp_name))
     {
         cout << "用户已存在！请直接登录" << endl;
     }
@@ -59,6 +59,8 @@ void UserManager::RegisterUser()
                     key++;
                 }
                 User_Json["NumberOfUsers"] = current_key + 1; // 记录用户数量
+                
+                // 测试
                 // cout << "key:" << key << endl;
                 // cout << "temp_name:" << temp_name << endl;
                 // cout << "pass1:" << pass1 << endl;
@@ -77,11 +79,11 @@ void UserManager::RegisterUser()
     }
 }
 
-bool UserManager::UserFind(const string &username) // 返回登录结果
+bool UserManager::UserFind(const string &username) // 返回登录结果 判断用户名是否存在
 {
     open();
-
-    // 遍历 JSON 对象的所有键值对
+    close();
+    // 遍历 JSON 对象的所有键值对 并检查用户名
     for (auto it = User_Json.begin(); it != User_Json.end(); ++it)
     {
         const string &key = it.key();   // 获取键
@@ -96,15 +98,14 @@ bool UserManager::UserFind(const string &username) // 返回登录结果
             return true; // 找到用户，返回 true
         }
     }
+    
     return false; // 未找到用户，返回 false
 }
 
-int UserManager::UserPass(const string &username, const string &password) // 返回登录结果
+int UserManager::UserPass(const string &username, const string &password) // 返回登录结果 判断密码是否正确
 {
     open();
-    json User_Json;
-    file >> User_Json;
-
+    close();
     // 遍历 JSON 对象的所有键值对
     for (auto it = User_Json.begin(); it != User_Json.end(); ++it)
     {
@@ -134,7 +135,7 @@ void UserManager::open()
 {
     if (!file.is_open())
     {
-        fstream file("../data/User.json", ios::in | ios::out);
+        file.open("../data/User.json", ios::in | ios::out);
         file >> User_Json;
     }
     if (!file.is_open())

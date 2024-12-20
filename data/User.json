@@ -2,17 +2,17 @@
     "1": {
         "name": "Admin",
         "password": "1",
-        "type": 1,
         "record": {
             "1": {
-                "BorrowTime": "2019-07-30 16:58",
-                "ReturnTime": "2019-08-06 16:58",
+                "BookCode": "9780201379028",
                 "BookID": "1",
                 "BookName": "The Art of Doing Science and Engineering",
-                "BookCode": "9780201379028",
-                "BookStatus": true
+                "BookStatus": true,
+                "BorrowTime": "2019-07-30 16:58",
+                "ReturnTime": "2019-08-06 16:58"
             }
-        }
+        },
+        "type": 1
     },
     "2": {
         "name": "User2",
@@ -34,5 +34,10 @@
         "password": "123",
         "type": "2"
     },
-    "NumberOfUsers": 5
+    "6": {
+        "name": "U",
+        "password": "1",
+        "type": "2"
+    },
+    "NumberOfUsers": 6
 }
