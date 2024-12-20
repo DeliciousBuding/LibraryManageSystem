@@ -25,16 +25,16 @@ void BookManager::bookManagerMenu()
         switch (chooseOfBookManagerMenu)
         {
         case 1:
-            BookManager::addBook();
+            addBook();
             break;
         case 2:
-            BookManager::deleteBook();
+            deleteBook();
             break;
         case 3:
-            BookManager::modifyBook();
+            modifyBook();
             break;
         case 4:
-            BookManager::searchBook();
+            searchBook();
             break;
         case 5:
             exitOfBookManagerMenu = true;

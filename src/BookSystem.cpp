@@ -34,7 +34,7 @@ void Book::open()
     {
         return;
     }
-    fstream file("../data/Book.json");
+    fstream file("../data/Book.json", ios::in|ios::out);
     if (!file.is_open())
     {
         cerr << "无法打开文件 Book.json" << endl;
@@ -200,5 +200,23 @@ void Book::setAll()
         default:
             cout << "无效的选择，请重新输入" << endl;
         }
+    }
+    save();
+}
+void Book::Borrow()
+{
+    if (Current > 0)
+    {
+        Current--;
+        BorrowTimes++;
+        save();
+    }
+}
+void Book::Return()
+{
+    if (Current < Total)
+    {
+        Current++;
+        save();
     }
 }

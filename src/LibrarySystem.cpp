@@ -1,10 +1,14 @@
 // LibrarySystem.cpp
 #include "LibrarySystem.h"
-#include "UserManager.h" // 包含 UserManager.h 文件
+#include "UserManager.h" 
+#include "ReaderManager.h" 
+#include "BookManager.h" 
+#include "BookSystem.h" 
+
 #include <bits/stdc++.h>
 using namespace std;
 
-// 其他成员函数实现...
+
 
 void LibrarySystem::Login()
 {
@@ -32,7 +36,6 @@ void LibrarySystem::Login()
         cout << "账号或密码错误，请重新输入" << endl;
     }
 }
-
 void LibrarySystem::AdminMenu()
 {
     // 读者用户管理：支持对读者的账号进行增、删、改、查；重置读者默认密码为123456；
@@ -107,3 +110,4 @@ void LibrarySystem::ReaderMenu()
         }
     }
 }
+

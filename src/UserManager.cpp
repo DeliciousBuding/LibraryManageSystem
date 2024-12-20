@@ -31,77 +31,65 @@ void UserManager::RegisterUser()
         }
         else
         {
-            fstream file("../data/User.json", ios::in | ios::out);
-            if (!file.is_open())
-            {
-                cerr << "无法打开文件 User.json" << endl;
-                return;
-            }
+            open(); // 读到file
 
             // 读取文件内容到json对象
-            json j;
-            file >> j;
             bool flag = 1;
-            for (int i = 1; i < j.size(); i++)
+
+            // 遍历查找，判断是否存在用户,过于低效
+            for (int i = 1; i < User_Json.size(); i++)
             {
-                json temp_user = j[to_string(i)];
-                if (temp_user["name"] == temp_name)
+                json temp_user = User_Json[to_string(i)];
+                if (temp_user["name"] == temp_name) // 匹配是否存在用户
                 {
                     flag = 0;
                     break;
                 }
             }
+
             if (flag)
             {
-                int current_key = (j["NumberOfUsers"]); // 实现用户数量增加
-                int key = current_key + 1;              // 获取key
+                int current_key = (User_Json["NumberOfUsers"]); // 实现用户数量增加
+                int key = current_key + 1;                      // 获取key
                 // 有问题，因为可能有用户被删除，导致key不连续
 
-                // 判断是否存在用户也为key
-                while (j.contains(to_string(key)))
+                // 判断是否存在用户也为key 获取可用的key(id号)
+                while (User_Json.contains(to_string(key)))
                 {
                     key++;
                 }
-                j["NumberOfUsers"] = key;
-                cout << "key:" << key << endl;
-                cout << "temp_name:" << temp_name << endl;
-                cout << "pass1:" << pass1 << endl;
-                // 写入文件
+                User_Json["NumberOfUsers"] = current_key + 1; // 记录用户数量
+                // cout << "key:" << key << endl;
+                // cout << "temp_name:" << temp_name << endl;
+                // cout << "pass1:" << pass1 << endl;
+                //  写入文件
 
-                j[to_string(key)] = {{"name", temp_name}, {"password", pass1}, {"type", "2"}};
-                file.seekp(0, ios::beg);
-                file << j.dump(4) << endl;
+                User_Json[to_string(key)] = {{"name", temp_name}, {"password", pass1}, {"type", "2"}};
+                file.seekp(0, ios::beg); // 定位文件开头
+                save();
             }
             else
             {
                 cout << "用户已存在！请直接登录" << endl;
             }
-            file.close();
+            close();
         }
     }
 }
 
 bool UserManager::UserFind(const string &username) // 返回登录结果
 {
-    ifstream file("../data/User.json");
-    if (!file.is_open())
-    {
-        cerr << "无法打开文件 User.json" << endl;
-        return false;
-    }
+    open();
 
-    json j;
-    file >> j;
-    
     // 遍历 JSON 对象的所有键值对
-    for (auto it = j.begin(); it != j.end(); ++it)
+    for (auto it = User_Json.begin(); it != User_Json.end(); ++it)
     {
-        const string &key = it.key();       // 获取键
-        const json &value = it.value();     // 获取值
-        
+        const string &key = it.key();   // 获取键
+        const json &value = it.value(); // 获取值
+
         if (key == "NumberOfUsers")
             continue; // 跳过 NumberOfUsers 键
-        
+
         // 检查当前用户的用户名是否与传入的用户名匹配
         if (value["name"] == username)
         {
@@ -113,30 +101,24 @@ bool UserManager::UserFind(const string &username) // 返回登录结果
 
 int UserManager::UserPass(const string &username, const string &password) // 返回登录结果
 {
-    ifstream file("../data/User.json");
-    if (!file.is_open())
-    {
-        cerr << "无法打开文件 User.json" << endl;
-        return -1;
-    }
+    open();
+    json User_Json;
+    file >> User_Json;
 
-    json j;
-    file >> j;
-    
     // 遍历 JSON 对象的所有键值对
-    for (auto it = j.begin(); it != j.end(); ++it)
+    for (auto it = User_Json.begin(); it != User_Json.end(); ++it)
     {
-        const string &key = it.key();       // 获取键
-        const json &value = it.value();     // 获取值
-        
+        const string &key = it.key();   // 获取对象的键
+        const json &value = it.value(); // 获取对象的值
+
         if (key == "NumberOfUsers")
             continue; // 跳过 NumberOfUsers 键
-        
+
         // 检查当前用户的用户名是否与传入的用户名匹配
-        if (value["name"] == username)
+        if (value["name"] == username) // 对象中名为"name"的值与传入的用户名匹配
         {
             // 检查当前用户的密码是否与传入的密码匹配
-            if (value["password"] == password)
+            if (value["password"] == password) // 对象中名为"password"的值与传入的密码匹配
             {
                 return value["type"]; // 密码正确，返回用户类型
             }
@@ -147,4 +129,34 @@ int UserManager::UserPass(const string &username, const string &password) // 返
         }
     }
     return -1; // 用户不存在，返回 -1
+}
+void UserManager::open()
+{
+    if (!file.is_open())
+    {
+        fstream file("../data/User.json", ios::in | ios::out);
+        file >> User_Json;
+    }
+    if (!file.is_open())
+    {
+        cerr << "无法打开文件 User.json" << endl;
+        return;
+    }
+}
+void UserManager::close()
+{
+    if (file.is_open())
+        file.close();
+    return;
+}
+void UserManager::save()
+{
+    if (file.is_open())
+    {
+        file << User_Json.dump(4) << endl;
+    }
+    else
+    {
+        cerr << "文件未打开" << endl;
+    }
 }

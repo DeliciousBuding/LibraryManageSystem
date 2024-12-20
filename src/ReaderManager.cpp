@@ -23,16 +23,16 @@ void ReaderManager::ReaderManagerMenu()
         switch (chooseOfReaderManagerMenu)
         {
         case 1:
-            ReaderManager::addReader();
+            addReader();
             break;
         case 2:
-            ReaderManager::deleteReader();
+            deleteReader();
             break;
         case 3:
-            ReaderManager::modifyReader();
+            modifyReader();
             break;
         case 4:
-            ReaderManager::searchReader();
+            searchReader();
             break;
         case 5:
             exitOfReaderManagerMenu = true;
@@ -61,6 +61,8 @@ void ReaderManager::addReader()
             exitOfAddReader = true;
             break;
         }
+        if(typeOfAddReader != 1 && typeOfAddReader != 2)
+            break;
         cout << "请输入用户名:";
         string readerName;
         cin >> readerName;
@@ -634,4 +636,8 @@ void ReaderManager::getID(string &name)
         cout << endl;
         cout << "未找到该用户" << endl;
     }
+}
+void ReaderManager::getReaderRecords(string &id)
+{
+
 }
