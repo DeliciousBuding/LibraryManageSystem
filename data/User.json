@@ -20,24 +20,9 @@
         "type": 2
     },
     "3": {
-        "name": "Delete",
-        "password": "123456",
-        "type": 2
-    },
-    "4": {
-        "name": "UserTest",
-        "password": "UserTest",
-        "type": 2
-    },
-    "5": {
-        "name": "User1",
-        "password": "123",
+        "name": "User",
+        "password": "3",
         "type": "2"
     },
-    "6": {
-        "name": "U",
-        "password": "1",
-        "type": "2"
-    },
-    "NumberOfUsers": 6
+    "NumberOfUsers": 3
 }

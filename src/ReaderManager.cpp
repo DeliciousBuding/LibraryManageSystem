@@ -1,4 +1,4 @@
-// ReaderManager.cpp
+
 #include <bits/stdc++.h>
 #include "ReaderManager.h"
 #include "nlohmann/json.hpp"
@@ -27,8 +27,11 @@ void ReaderManager::save()
 {
     if (file.is_open())
     {
-        file.seekp(0, ios::beg);//seekp是将文件写入指针定位到文件开头
-        file << User_json.dump(4) << endl;
+        file.seekp(0, ios::beg);           // 定位到文件开头
+        file << User_json.dump(4) << endl; // 写入更新后的json数据
+        // file.flush();                      // 确保所有缓冲区内容都写入文件
+        // file.seekp(0, ios::end);           // 移动到文件末尾
+        // file.clear();                      // 清除文件状态标志
     }
     else
     {
@@ -174,6 +177,7 @@ void ReaderManager::deleteReader()
             break;
         case 2:
             break;
+
         default:
 
             cout << "输入错误" << endl;
@@ -184,7 +188,7 @@ void ReaderManager::deleteReader()
             cout << "请输入删除内容：";
             showID(enterOfDeleteReader);
             cout << endl;
-            if (enterOfDeleteReader == "1")
+            if (enterOfDeleteReader == "1") // 主管理员序号为1
             {
                 cout << "主管理员不能删除!" << endl;
                 exitOfDeleteReader = true;
@@ -197,8 +201,6 @@ void ReaderManager::deleteReader()
                 deleteID(enterOfDeleteReader);
         }
     }
-    save();
-    close();
 }
 
 void ReaderManager::deleteID(string id)
@@ -215,6 +217,7 @@ void ReaderManager::deleteID(string id)
         if (key == id) // 找到目标用户并删除
         {
             User_json.erase(it);
+            // cout<<User_json.dump(4) << endl;//测试输出
             found = true;
             break;
         }
@@ -223,12 +226,17 @@ void ReaderManager::deleteID(string id)
     if (found)
     {
         // User_json["NumberOfUsers"]=User_json["NumberOfUsers"]-1; // 减少用户数量
-        int tempNumber = User_json["NumberOfUsers"];
-        tempNumber--;
-        User_json["NumberOfUsers"] = tempNumber;
-        //file << User_json.dump(4) << endl; // 写入更新后的json数据
-        //惨痛教训：原本的file操作没删干净，应该都使用save()
+        int Num = User_json["NumberOfUsers"];
+        User_json["NumberOfUsers"] = Num - 1;
+        // file << User_json.dump(4) << endl; // 写入更新后的json数据
+        // 惨痛教训：原本的file操作没删干净，应该都使用save()
         cout << "删除成功" << endl;
+        // cout<<User_json.dump(4) << endl;
+        ofstream temp_file("../data/User.json");
+        temp_file<<User_json.dump(4)<<endl;
+        temp_file.close();
+        //save();
+        //close();
     }
     else
     {
@@ -298,7 +306,6 @@ void ReaderManager::modifyReader()
         {
         case 1:
         {
-            enter;
             cout << endl;
             cout << "请输入查询内容：";
             cin >> enter;
@@ -307,7 +314,6 @@ void ReaderManager::modifyReader()
         }
         case 2:
         {
-            enter;
             cout << endl;
             cout << "请输入查询内容：";
             cin >> enter;
