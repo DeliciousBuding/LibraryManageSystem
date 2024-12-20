@@ -8,6 +8,7 @@ class UserManager; // 声明 UserManager 类
 class LibrarySystem
 {
 public:
+    
     void AdminMenu();
     void ReaderMenu();
     void Login();
