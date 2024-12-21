@@ -1,6 +1,7 @@
 // UserManager.cpp
 #include "UserManager.h"
 #include "BookManager.h"
+#include "BookSystem.h"
 #include <bits/stdc++.h>
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
@@ -156,5 +157,20 @@ void UserManager::save()
     else
     {
         cerr << "文件未打开" << endl;
+    }
+}
+
+void User::showInfo()
+{
+    cout << "用户名：" << name << endl;
+    cout << "密码：" << password << endl;
+    cout << "用户类型：" << type << endl;
+    cout << "借阅记录：" << endl;
+    for (auto &record : records)
+    {
+        Book tempbook(stoi(record.BookID));
+        cout << "图书名称：" << tempbook.getName()<< endl;
+        cout << "图书编号：" << record.BookCode << endl;
+        cout << "图书ID：" << record.BookID << endl;
     }
 }

@@ -33,8 +33,8 @@ private:
     json bookJson; // json对象，以供整个类使用
 
 public:
-    Book(const json &openedBook); // 构造函数
-
+    Book(int id); // 构造函数
+    json getBookById(int id); // 获得json对象
     void readData(const json &openedBook); // 初始化数据 被所有open方法调用
     // open方法 打开并读取json文件中的数据 然后获得一个theBook对象
     void open();
@@ -103,6 +103,10 @@ public:
 
     string getIntroduction() const { return introduction; }
     void setIntroduction(const string &introduction) { this->introduction = introduction; }
+
+    friend class BookManager;
+    friend class ReaderManager;
+    friend class UserManager;
 };
 
 #endif

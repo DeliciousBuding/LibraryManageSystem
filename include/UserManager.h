@@ -4,6 +4,7 @@
 #include <bits/stdc++.h>
 #include "BookManager.h"
 #include "ReaderManager.h"
+#include "BookSystem.h"
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 using namespace std;
@@ -72,6 +73,9 @@ public:
         }
         return j;
     }
+    friend class ReaderManager;
+    friend class BookManager;
+    void showInfo();
 };
 
 class UserManager

@@ -2,6 +2,7 @@
 #ifndef READERMANAGER_H
 #define READERMANAGER_H
 #include <bits/stdc++.h>
+#include "UserManager.h"
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 using namespace std;
@@ -25,8 +26,8 @@ public:
     
     string getReaderID(string &name);
     //初始化用户
-    void getReader(string &id);//获取用户信息 并初始化到Reader对象中
-    void showReader(string &id);//显示用户信息
+    User getReader(string &id); // 获取用户信息 返回User类型
+    void showReader(string &id);//显示用户信息 
 
     //修改用户信息
     void modifyUsername(string target);
@@ -43,6 +44,7 @@ public:
     fstream file;
 
     friend class UserManager;
+    friend class User;
 };
 
 #endif

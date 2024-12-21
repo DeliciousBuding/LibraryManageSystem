@@ -2,6 +2,7 @@
 #include <bits/stdc++.h>
 #include "ReaderManager.h"
 #include "nlohmann/json.hpp"
+#include "UserManager.h"
 using json = nlohmann::json;
 using namespace std;
 
@@ -241,10 +242,10 @@ void ReaderManager::deleteID(string id)
         cout << "删除成功" << endl;
         // cout<<User_json.dump(4) << endl;
         ofstream temp_file("../data/User.json");
-        temp_file<<User_json.dump(4)<<endl;
+        temp_file << User_json.dump(4) << endl;
         temp_file.close();
-        //save();
-        //close();
+        // save();
+        // close();
     }
     else
     {
@@ -545,8 +546,7 @@ void ReaderManager::showID(string &id)
 
         if (key == id) // 找到目标用户并显示信息
         {
-            
-            
+
             flag = 0;
             cout << endl;
             cout << "用户信息显示面板：" << endl;
@@ -589,4 +589,25 @@ void ReaderManager::getID(string &name)
         cout << endl;
         cout << "未找到该用户" << endl;
     }
+}
+
+User ReaderManager::getReader(string &id)
+{
+    if (User_json.contains(id))
+    {
+        json TempUserID = User_json[id];
+        User readerObj(TempUserID);
+        return readerObj;
+        // 将 readerObj 存储到 userManager 的成员变量中
+    }
+    else
+    {
+        // 处理找不到用户的情况
+        std::cerr << "User with ID " << id << " not found." << std::endl;
+    }
+}
+void ReaderManager::showReader(string &id)
+{
+    User user = getReader(id);
+    user.showInfo();
 }

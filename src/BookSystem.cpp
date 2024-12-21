@@ -4,26 +4,60 @@
 
 using json = nlohmann::json;
 using namespace std;
-
-// 构造函数, 初始化数据成员 当需要新建Book时使用
-Book::Book(const json &openedBook)
+json Book::getBookById(int id)
 {
-    id = openedBook.value("id", 0);
-    name = openedBook.value("Name", "");
-    bookCode = openedBook.value("ISBN/ISSN", "");
-    author = openedBook.value("Author", "");
-    originalAuthor = openedBook.value("OriginalAuthor", "");
-    isbnIssn = openedBook.value("ISBN/ISSN", "");
-    publisher = openedBook.value("Publisher", "");
-    language = openedBook.value("Language", "");
-    edition = openedBook.value("Edition", 0);
-    publicationYear = openedBook.value("PublicationYear", 0);
-    publicationMonth = openedBook.value("PublicationMonth", 0);
-    price = openedBook.value("Price", 0.00);
-    total = openedBook.value("Total", 0);
-    current = openedBook.value("Current", 0);
-    borrowTimes = openedBook.value("BorrowTimes", 0);
-    introduction = openedBook.value("Introduction", "");
+    open();
+    json data = json::parse(file);
+    string idStr = to_string(id);
+    if (data.find(idStr) != data.end())
+    {
+        return data[idStr];
+    }
+    return json();
+}
+// 构造函数, 初始化数据成员 当需要新建Book时使用
+Book::Book(int id)
+{
+    json openedBook = getBookById(id);
+    if (!openedBook.is_null())
+    {
+        this->id = openedBook.value("id", 0);
+        name = openedBook.value("Name", "");
+        bookCode = openedBook.value("ISBN/ISSN", "");
+        author = openedBook.value("Author", "");
+        originalAuthor = openedBook.value("OriginalAuthor", "");
+        isbnIssn = openedBook.value("ISBN/ISSN", "");
+        publisher = openedBook.value("Publisher", "");
+        language = openedBook.value("Language", "");
+        edition = openedBook.value("Edition", 0);
+        publicationYear = openedBook.value("PublicationYear", 0);
+        publicationMonth = openedBook.value("PublicationMonth", 0);
+        price = openedBook.value("Price", 0.00);
+        total = openedBook.value("Total", 0);
+        current = openedBook.value("Current", 0);
+        borrowTimes = openedBook.value("BorrowTimes", 0);
+        introduction = openedBook.value("Introduction", "");
+    }
+    else
+    {
+        // 处理未找到书籍的情况
+        this->id = 0;
+        name = "";
+        bookCode = "";
+        author = "";
+        originalAuthor = "";
+        isbnIssn = "";
+        publisher = "";
+        language = "";
+        edition = 0;
+        publicationYear = 0;
+        publicationMonth = 0;
+        price = 0.00;
+        total = 0;
+        current = 0;
+        borrowTimes = 0;
+        introduction = "";
+    }
 }
 
 // 初始化数据 被所有open方法调用
