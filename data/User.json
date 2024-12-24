@@ -1,371 +1,221 @@
 {
-    "NumberOfUsers": 13,
     "1": {
-        "id": 1,
         "name": "Admin",
         "password": "1",
-        "type": "1",
-        "record": []
+        "type": 1
+    },
+    "10": {
+        "name": "1",
+        "password": "1",
+        "records": null,
+        "type": 1
+    },
+    "11": {
+        "name": "22",
+        "password": "22",
+        "records": null,
+        "type": 1
     },
     "2": {
-        "id": 2,
-        "name": "User2",
-        "password": "1",
-        "type": "2",
-        "record": [
-            {
+        "name": "2",
+        "password": "2",
+        "records": {
+            "1": {
                 "BookCode": "9780201379028",
                 "BookID": "1",
                 "BookReturn": true,
                 "BorrowTime": "2019-07-30 16:58",
                 "ReturnTime": "2019-08-06 16:58"
             }
-        ]
+        },
+        "type": 2
     },
     "3": {
-        "id": 3,
-        "name": "User",
+        "name": "User3",
         "password": "3",
-        "type": "2",
-        "record": []
+        "type": 2
     },
     "4": {
-        "id": 4,
         "name": "User4",
         "password": "4",
-        "type": "2",
-        "record": [
-            {
+        "records": {
+            "1": {
                 "BookCode": "9781492041139",
                 "BookID": "2",
                 "BookReturn": true,
                 "BorrowTime": "2024-09-01 10:00",
                 "ReturnTime": "2024-09-05 10:00"
             },
-            {
+            "2": {
                 "BookCode": "9787121075391",
                 "BookID": "3",
                 "BookReturn": false,
                 "BorrowTime": "2024-09-10 12:00",
-                "ReturnTime": ""
+                "ReturnTime": "0"
             },
-            {
+            "3": {
                 "BookCode": "9787115366601",
                 "BookID": "4",
                 "BookReturn": true,
                 "BorrowTime": "2024-09-15 14:00",
                 "ReturnTime": "2024-09-20 14:00"
             }
-        ]
+        },
+        "type": 2
     },
     "5": {
-        "id": 5,
         "name": "User5",
-        "password": "5",
-        "type": "2",
-        "record": [
-            {
+        "password": "1",
+        "records": {
+            "1": {
                 "BookCode": "9780132350884",
                 "BookID": "5",
                 "BookReturn": true,
                 "BorrowTime": "2024-09-25 16:00",
                 "ReturnTime": "2024-09-30 16:00"
             },
-            {
+            "2": {
                 "BookCode": "9780201616224",
                 "BookID": "6",
                 "BookReturn": true,
                 "BorrowTime": "2024-10-05 18:00",
                 "ReturnTime": "2024-10-10 18:00"
             },
-            {
+            "3": {
                 "BookCode": "9787111615924",
                 "BookID": "7",
                 "BookReturn": false,
                 "BorrowTime": "2024-10-15 20:00",
-                "ReturnTime": ""
+                "ReturnTime": "0"
             }
-        ]
+        },
+        "type": 2
     },
     "6": {
-        "id": 6,
         "name": "User6",
         "password": "6",
-        "type": "2",
-        "record": [
-            {
+        "records": {
+            "1": {
                 "BookCode": "9787115329441",
                 "BookID": "8",
                 "BookReturn": true,
                 "BorrowTime": "2024-10-20 22:00",
                 "ReturnTime": "2024-10-25 22:00"
             },
-            {
+            "2": {
                 "BookCode": "9787302270805",
                 "BookID": "9",
                 "BookReturn": true,
                 "BorrowTime": "2024-10-30 23:00",
                 "ReturnTime": "2024-11-04 23:00"
             },
-            {
+            "3": {
                 "BookCode": "9787111209877",
                 "BookID": "10",
                 "BookReturn": false,
                 "BorrowTime": "2024-11-09 01:00",
-                "ReturnTime": ""
+                "ReturnTime": "0"
             },
-            {
+            "4": {
                 "BookCode": "9780596001692",
                 "BookID": "11",
                 "BookReturn": true,
                 "BorrowTime": "2024-11-14 03:00",
                 "ReturnTime": "2024-11-19 03:00"
             }
-        ]
+        },
+        "type": 2
     },
     "7": {
-        "id": 7,
         "name": "User7",
         "password": "7",
-        "type": "2",
-        "record": [
-            {
+        "records": {
+            "1": {
                 "BookCode": "9780321146530",
                 "BookID": "12",
                 "BookReturn": true,
                 "BorrowTime": "2024-11-24 05:00",
                 "ReturnTime": "2024-11-29 05:00"
             },
-            {
+            "2": {
                 "BookCode": "9780131143678",
                 "BookID": "13",
                 "BookReturn": true,
                 "BorrowTime": "2024-12-01 07:00",
                 "ReturnTime": "2024-12-06 07:00"
             },
-            {
+            "3": {
                 "BookCode": "9780201485672",
                 "BookID": "14",
                 "BookReturn": false,
                 "BorrowTime": "2024-12-11 09:00",
-                "ReturnTime": ""
+                "ReturnTime": "0"
             },
-            {
+            "4": {
                 "BookCode": "9780321127426",
                 "BookID": "15",
                 "BookReturn": true,
                 "BorrowTime": "2024-12-16 11:00",
                 "ReturnTime": "2024-12-21 11:00"
             },
-            {
+            "5": {
                 "BookCode": "9780735667454",
                 "BookID": "16",
                 "BookReturn": true,
                 "BorrowTime": "2024-12-26 13:00",
                 "ReturnTime": "2024-12-31 13:00"
             }
-        ]
+        },
+        "type": 2
     },
     "8": {
-        "id": 8,
         "name": "User8",
         "password": "8",
-        "type": "2",
-        "record": [
-            {
+        "records": {
+            "1": {
                 "BookCode": "9780321573513",
                 "BookID": "17",
                 "BookReturn": true,
                 "BorrowTime": "2024-09-02 15:00",
                 "ReturnTime": "2024-09-07 15:00"
             },
-            {
+            "2": {
                 "BookCode": "9787121220616",
                 "BookID": "18",
                 "BookReturn": true,
                 "BorrowTime": "2024-09-12 17:00",
                 "ReturnTime": "2024-09-17 17:00"
             },
-            {
+            "3": {
                 "BookCode": "9780131478303",
                 "BookID": "19",
                 "BookReturn": false,
                 "BorrowTime": "2024-09-22 19:00",
-                "ReturnTime": ""
+                "ReturnTime": "0"
             }
-        ]
+        },
+        "type": 2
     },
     "9": {
-        "id": 9,
         "name": "User9",
         "password": "9",
-        "type": "2",
-        "record": [
-            {
+        "records": {
+            "1": {
                 "BookCode": "9780596517753",
                 "BookID": "20",
                 "BookReturn": true,
                 "BorrowTime": "2024-09-27 21:00",
                 "ReturnTime": "2024-10-02 21:00"
             },
-            {
+            "2": {
                 "BookCode": "9780132350884",
                 "BookID": "21",
                 "BookReturn": true,
                 "BorrowTime": "2024-10-07 23:00",
                 "ReturnTime": "2024-10-12 23:00"
-            },
-            {
-                "BookCode": "9780201616224",
-                "BookID": "22",
-                "BookReturn": false,
-                "BorrowTime": "2024-10-17 01:00",
-                "ReturnTime": ""
-            },
-            {
-                "BookCode": "9787111615924",
-                "BookID": "23",
-                "BookReturn": true,
-                "BorrowTime": "2024-10-22 03:00",
-                "ReturnTime": "2024-10-27 03:00"
             }
-        ]
+        },
+        "type": 2
     },
-    "10": {
-        "id": 10,
-        "name": "User10",
-        "password": "10",
-        "type": "2",
-        "record": [
-            {
-                "BookCode": "9787115329441",
-                "BookID": "24",
-                "BookReturn": true,
-                "BorrowTime": "2024-10-30 05:00",
-                "ReturnTime": "2024-11-04 05:00"
-            },
-            {
-                "BookCode": "9787302270805",
-                "BookID": "25",
-                "BookReturn": true,
-                "BorrowTime": "2024-11-09 07:00",
-                "ReturnTime": "2024-11-14 07:00"
-            },
-            {
-                "BookCode": "9787111209877",
-                "BookID": "26",
-                "BookReturn": false,
-                "BorrowTime": "2024-11-19 09:00",
-                "ReturnTime": ""
-            }
-        ]
-    },
-    "11": {
-        "id": 11,
-        "name": "User11",
-        "password": "11",
-        "type": "2",
-        "record": [
-            {
-                "BookCode": "9780262033848",
-                "BookID": "27",
-                "BookReturn": true,
-                "BorrowTime": "2024-11-24 11:00",
-                "ReturnTime": "2024-11-29 11:00"
-            },
-            {
-                "BookCode": "9780136319137",
-                "BookID": "28",
-                "BookReturn": true,
-                "BorrowTime": "2024-12-01 13:00",
-                "ReturnTime": "2024-12-06 13:00"
-            },
-            {
-                "BookCode": "9780735627679",
-                "BookID": "29",
-                "BookReturn": false,
-                "BorrowTime": "2024-12-11 15:00",
-                "ReturnTime": ""
-            },
-            {
-                "BookCode": "9780128009018",
-                "BookID": "30",
-                "BookReturn": true,
-                "BorrowTime": "2024-12-16 17:00",
-                "ReturnTime": "2024-12-21 17:00"
-            }
-        ]
-    },
-    "12": {
-        "id": 12,
-        "name": "User12",
-        "password": "12",
-        "type": "2",
-        "record": [
-            {
-                "BookCode": "9780201616224",
-                "BookID": "31",
-                "BookReturn": true,
-                "BorrowTime": "2024-12-26 19:00",
-                "ReturnTime": "2024-12-31 19:00"
-            },
-            {
-                "BookCode": "9780201633612",
-                "BookID": "32",
-                "BookReturn": true,
-                "BorrowTime": "2024-09-01 21:00",
-                "ReturnTime": "2024-09-06 21:00"
-            },
-            {
-                "BookCode": "9780984782803",
-                "BookID": "33",
-                "BookReturn": false,
-                "BorrowTime": "2024-09-11 23:00",
-                "ReturnTime": ""
-            },
-            {
-                "BookCode": "9787111649436",
-                "BookID": "34",
-                "BookReturn": true,
-                "BorrowTime": "2024-09-16 01:00",
-                "ReturnTime": "2024-09-21 01:00"
-            },
-            {
-                "BookCode": "9780134685991",
-                "BookID": "35",
-                "BookReturn": true,
-                "BorrowTime": "2024-09-26 03:00",
-                "ReturnTime": "2024-10-01 03:00"
-            }
-        ]
-    },
-    "13": {
-        "id": 13,
-        "name": "User13",
-        "password": "13",
-        "type": "2",
-        "record": [
-            {
-                "BookCode": "9787115527406",
-                "BookID": "36",
-                "BookReturn": true,
-                "BorrowTime": "2024-10-06 05:00",
-                "ReturnTime": "2024-10-11 05:00"
-            },
-            {
-                "BookCode": "9780201835959",
-                "BookID": "37",
-                "BookReturn": true,
-                "BorrowTime": "2024-10-16 07:00",
-                "ReturnTime": "2024-10-21 07:00"
-            },
-            {
-                "BookCode": "9787115428028",
-                "BookID": "38",
-                "BookReturn": false,
-                "BorrowTime": "2024-10-21 09:00",
-                "ReturnTime": ""
-            }
-        ]
-    }
+    "NumberOfUsers": 11
 }

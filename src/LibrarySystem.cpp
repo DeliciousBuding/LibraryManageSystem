@@ -1,34 +1,26 @@
-// LibrarySystem.cpp
 #include "LibrarySystem.h"
-#include "UserManager.h" 
-#include "ReaderManager.h" 
-#include "BookManager.h" 
-#include "BookSystem.h" 
-
-#include <bits/stdc++.h>
 using namespace std;
-
-
-
-void LibrarySystem::Login()
+void Login()
 {
     cout << endl;
     string username, password;
     cout << "登录" << endl
          << "请输入您的账号和密码：" << endl;
     cin >> username >> password;
-    int temp = userManager.UserPass(username, password);
-    if (temp == 1)
+    
+    User tempUser(username);
+    if(tempUser.getPassword() == password)
     {
-        cout << endl;
-        cout << "欢迎管理员" << endl;
-        AdminMenu();
-    }
-    else if (temp == 2)
-    {
-        cout << endl;
-        cout << "欢迎读者" << endl;
-        ReaderMenu();
+        if(tempUser.getType() == 1)
+        {
+            // 管理员
+            AdminMenu(tempUser);
+        }
+        else
+        {
+            // 读者
+            ReaderMenu(tempUser);
+        }
     }
     else
     {
@@ -36,16 +28,28 @@ void LibrarySystem::Login()
         cout << "账号或密码错误，请重新输入" << endl;
     }
 }
-void LibrarySystem::AdminMenu()
+void Register()
+{
+    cout << endl;
+    string username, password;
+    cout << "注册" << endl
+         << "请输入您的账号和密码：" << endl;
+    cin >> username >> password;
+    User temp(username);
+    temp.setPassword(password);
+    temp.setType(2);
+    temp.save();
+}
+void AdminMenu(User &NowUser)
 {
     // 读者用户管理：支持对读者的账号进行增、删、改、查；重置读者默认密码为123456；
     // 书籍信息管理：支持对馆藏图书进行增、删、改、查；
-    bool exitOfLibrarySystem = false;
-    while (!exitOfLibrarySystem)
+    bool exitOfAdminMenu = false;
+    while (!exitOfAdminMenu)
     {
         cout << endl;
         cout << "管理员菜单" << endl;
-        cout << "1.读者用户管理" << endl;
+        cout << "1.用户管理" << endl;
         cout << "2.书籍信息管理" << endl;
         cout << "3.退出" << endl;
         cout << "请输入你的选择:";
@@ -54,20 +58,20 @@ void LibrarySystem::AdminMenu()
         switch (choiceOfAdminMenu)
         {
         case 1:
-            userManager.readerManager.ReaderManagerMenu();
+            UserManagerMenu();
             break;
         case 2:
             // 书籍信息管理
-            userManager.bookManager.bookManagerMenu();
+            BookManagerMenu();
             break;
         case 3:
             // 退出
-            exitOfLibrarySystem = true;
+            exitOfAdminMenu = true;
             break;
         }
     }
 }
-void LibrarySystem::ReaderMenu()
+void ReaderMenu(User &NowUser)
 {
     // 读者可以查看自己的借阅记录
     // 读者可以搜索图书
@@ -91,6 +95,7 @@ void LibrarySystem::ReaderMenu()
         {
         case 1:
             // 查看借阅记录
+            NowUser.ShowRecords();
             break;
         case 2:
             // 搜索图书
@@ -103,6 +108,7 @@ void LibrarySystem::ReaderMenu()
             break;
         case 5:
             // 修改密码
+            NowUser.ModifyPassword();
             break;
         case 6:
             exitOfReaderMenu = true;
