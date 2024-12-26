@@ -1,102 +1,66 @@
 #ifndef BOOK_H
 #define BOOK_H
 
-#include <fstream>
-#include<iostream>
 #include <string>
-#include "nlohmann/json.hpp"
-using json = nlohmann::json;
+#include <iostream>
 using namespace std;
-
-class Book // 单本图书的类
+class Book
 {
 private:
-    // 数据结构
-    int id;
-    int borrowTimes;
-    int current;
-    int total;
-    double price;
-    string bookCode;
     string name;
-    string originalName;
+    string bookCode;
     string author;
-    string originalAuthor;
     string publisher;
     string language;
+    int id;
     int edition;
     int publicationYear;
     int publicationMonth;
     string introduction;
+    int borrowTimes;
+    int total;
+    int current;
+    double price;
+    string originalName;
+    string originalAuthor;
 
 public:
-    Book(string code);                          // 构造函数
-    //~Book();                                     // 析构函数
-    json getBookById(int id);              // 获得json对象
-    void readData(const json &openedBook); // 初始化数据 被所有open方法调用
-    // open方法 打开并读取json文件中的数据 然后获得一个theBook对象
-    void open();  // 打开文件
-    void save();  // 保存数据
-    void load();  // 读取数据
-    void close(); // 关闭文件
+    Book(string code);
+    Book();
+    void show();
 
-    // 操作数据
-    void show(); // 显示数据
-
-    void setAll(); // 设置数据
-
-    // 借阅和归还
-    void borrow();     // 借书
-    void returnBook(); // 还书
-
-    // Getter接口和Setter接口
-    int getId() const { return id; }
-    void setId(int newId) { id = newId; }
-
-    int getBorrowTimes() const { return borrowTimes; }
-    void setBorrowTimes(int times) { borrowTimes = times; }
-
-    int getCurrent() const { return current; }
-    void setCurrent(int current) { this->current = current; }
-
-    int getTotal() const { return total; }
-    void setTotal(int total) { this->total = total; }
-
-    double getPrice() const { return price; }
-    void setPrice(double price) { this->price = price; }
-
-    string getBookCode() const { return bookCode; }
-    void setBookCode(const string &code) { bookCode = code; }
-
-    string getName() const { return name; }
-    void setName(const string &name) { this->name = name; }
-
-    string getOriginalName() const { return originalName; }
-    void setOriginalName(const string &originalName) { this->originalName = originalName; }
-
-    string getAuthor() const { return author; }
-    void setAuthor(const string &author) { this->author = author; }
-
-    string getOriginalAuthor() const { return originalAuthor; }
-    void setOriginalAuthor(const string &originalAuthor) { this->originalAuthor = originalAuthor; }
-  
-    string getPublisher() const { return publisher; }
-    void setPublisher(const string &publisher) { this->publisher = publisher; }
-
-    string getLanguage() const { return language; }
-    void setLanguage(const string &language) { this->language = language; }
-
-    int getEdition() const { return edition; }
+    string getName() { return name; }
+    void setName(string name) { this->name = name; }
+    string getBookCode() { return bookCode; }
+    void setBookCode(string bookCode) { this->bookCode = bookCode; }
+    string getAuthor() { return author; }
+    void setAuthor(string author) { this->author = author; }
+    string getPublisher() { return publisher; }
+    void setPublisher(string publisher) { this->publisher = publisher; }
+    string getLanguage() { return language; }
+    void setLanguage(string language) { this->language = language; }
+    int getEdition() { return edition; }
     void setEdition(int edition) { this->edition = edition; }
-
-    int getPublicationYear() const { return publicationYear; }
+    int getPublicationYear() { return publicationYear; }
     void setPublicationYear(int publicationYear) { this->publicationYear = publicationYear; }
-
-    int getPublicationMonth() const { return publicationMonth; }
+    int getPublicationMonth() { return publicationMonth; }
     void setPublicationMonth(int publicationMonth) { this->publicationMonth = publicationMonth; }
-
-    string getIntroduction() const { return introduction; }
-    void setIntroduction(const string &introduction) { this->introduction = introduction; }
+    string getIntroduction() { return introduction; }
+    void setIntroduction(string introduction) { this->introduction = introduction; }
+    int getBorrowTimes() { return borrowTimes; }
+    void setBorrowTimes(int borrowTimes) { this->borrowTimes = borrowTimes; }
+    int getTotal() { return total; }
+    void setTotal(int total) { this->total = total; }
+    int getCurrent() { return current; }
+    void setCurrent(int current) { this->current = current; }
+    double getPrice() { return price; }
+    void setPrice(double price) { this->price = price; }
+    string getOriginalName() { return originalName; }
+    void setOriginalName(string originalName) { this->originalName = originalName; }
+    string getOriginalAuthor() { return originalAuthor; }
+    void setOriginalAuthor(string originalAuthor) { this->originalAuthor = originalAuthor; }
+    int getId() { return id; }
+    void setId(int id) { this->id = id; }
 };
 
 #endif

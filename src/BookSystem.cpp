@@ -1,156 +1,183 @@
 #include "BookSystem.h"
-vector<Book> Books;
-// 初始化Booklist
-void CreateBooks(bool Mode = 0)
-{
-    //  打开Book.json
-    if (!BookFile.is_open())
-        BookFile.open("../data/Book.json", ios::in | ios::out);
-    if (!BookFile.is_open())
-        cerr << "无法打开文件 Book.json" << endl;
-    if (Mode)
-        cout << "Book.json 打开完成" << endl;
-    // 读取数据到BookJson
-    if (BookFile.is_open())
-        BookFile >> BookJson;
-    BookFile.close();
-    if (Mode)
-        cout << "BookJson 初始化完成" << endl;
-    // cout << BookJson<<endl;
-    //  现在实现BookJson->Books
-    // 检查Books是否为空
-    if (Books.size() != 0)
-    {
-        if (Mode)
-            cout << "Books不为空,正在重置" << endl;
-        // 清空Books
-        Books.clear();
-    }
-    for (size_t i = 0; i < BookJson.size(); ++i)
-    {
-        auto it = BookJson.begin();
-        std::advance(it, i);
-        // cout << "正在构造Books" << endl;
-        // cout << it.key() << endl;
-        string tempcode = it.value()["ISBN/ISSN"];
-        // cout << tempcode << endl;
-        Book tempbook(tempcode);
-        // tempbook.show();
-        // cout << "tempbook初始化完成" << endl;
-        //  构造一个Book对象
-        Books.push_back(tempbook);
-        // Books[stoi(it.key())] = tempbook; // 存入Books里 key是id
-        // cout << "成功存入Books里" << endl;
-    }
-    if (Mode)
-        cout << "Books 初始化完成" << endl;
-}
 
-void BookManagerMenu() // 管理员图书管理菜单
+// 修改: vector<Book> Books; // 初始化Booklist
+unordered_map<string, Book> Books; // 初始化Booklist
+void BookManagerMenu()
 {
-    cout << endl;
-    CreateBooks(1); // 初始化Books
-    SaveBooks(1);   // 保存Books
-    // Books[1].show(); // 测试能否输出[1]的图书
+    CreateBooks();
+    // SaveBooks(true);
     bool exitOfBookManagerMenu = false;
     while (!exitOfBookManagerMenu)
     {
         cout << endl;
-        cout << "图书后台管理菜单" << endl;
-        cout << "1.添加图书" << endl;
-        cout << "2.删除图书" << endl;
-        cout << "3.修改图书" << endl;
-        cout << "4.查询图书" << endl;
-        cout << "5.退出" << endl;
-        cout << "请输入你的选择:";
-        int chooseOfBookManagerMenu;
-        cin >> chooseOfBookManagerMenu;
-        switch (chooseOfBookManagerMenu)
+        cout << "欢迎进入图书管理系统" << endl;
+        cout << "1. 添加图书" << endl;
+        cout << "2. 删除图书" << endl;
+        cout << "3. 查找图书" << endl;
+        cout << "4. 修改图书" << endl;
+        cout << "5. 显示所有图书" << endl;
+        cout << "6. 退出图书管理系统" << endl;
+        cout << "请输入您的选择: ";
+        int choice;
+        cin >> choice;
+        switch (choice)
         {
         case 1:
-            addBook();
+            AddBook();
             break;
         case 2:
-            deleteBook();
+            DeleteBook();
             break;
         case 3:
-            modifyBook();
+            FindBook();
             break;
         case 4:
-            searchBook();
+            ModifyBook();
             break;
         case 5:
+            ShowAllBooks();
+            break;
+        case 6:
             exitOfBookManagerMenu = true;
-        default:
             break;
         }
     }
 }
-void addBook()
+
+void AddBook()
 {
 }
-void deleteBook()
+void DeleteBook()
 {
 }
-void searchBook()
+void FindBook()
 {
 }
-void modifyBook()
+void ModifyBook()
+{
+}
+void ShowAllBooks()
 {
 }
 
-void SaveBooks(bool Mode = 0)
+void CreateBooks(bool Mode)
 {
-    //  打开Book.json
-    if (!BookFile.is_open())
-        BookFile.open("../data/Book.json", ios::out | ios::trunc); // 修改: 使用ios::trunc模式确保文件被清空
-    if (!BookFile.is_open())
-        cerr << "无法打开文件 Book.json" << endl;
-    if (Mode)
+    ifstream infile("../data/Book.json");
+    if (!infile.is_open())
     {
-        cout << "Book.json 打开完成" << endl;
-        cout << "正在写入BookJson" << endl;
-    }
-    // 清空BookJson
-    BookJson.clear();
-    if (Mode)
-        cout << "BookJson 清空完成" << endl;
-    // Books->BookJson
-    for (auto it : Books)
-    {
-        json tempbook;
-        tempbook["id"] = it.getId();
-        tempbook["Name"] = it.getName();
-        tempbook["ISBN/ISSN"] = it.getBookCode();
-        tempbook["Author"] = it.getAuthor();
-        tempbook["Publisher"] = it.getPublisher();
-        tempbook["Language"] = it.getLanguage();
-        tempbook["Edition"] = it.getEdition();
-        tempbook["PublicationYear"] = it.getPublicationYear();
-        tempbook["PublicationMonth"] = it.getPublicationMonth();
-        tempbook["Introduction"] = it.getIntroduction();
-        tempbook["BorrowTimes"] = it.getBorrowTimes();
-        tempbook["Total"] = it.getTotal();
-        tempbook["Current"] = it.getCurrent();
-        tempbook["Price"] = it.getPrice();
-        if (it.getOriginalName() != "无")
-            tempbook["OriginalName"] = it.getOriginalName();
-        if (it.getOriginalAuthor() != "无")
-            tempbook["OriginalAuthor"] = it.getOriginalAuthor();
-        BookJson[to_string(it.getId())] = tempbook; // 修改: 使用字符串形式的ID作为键
+        cout << "文件打开失败" << endl;
+        perror("Error opening file"); // 添加此行以输出系统错误信息
+        return;
     }
     if (Mode)
-        cout << "BookJson 写入完成" << endl;
-    // cout<<BookJson<<endl;
-    //  保存数据到 Book.json
-    if (BookFile.is_open())
+        cout << "文件打开成功" << endl;
+    json BookJson;
+    infile >> BookJson;
+    if (Mode)
+        cout << BookJson << endl;
+    infile.close();
+    if (Mode)
+        cout << "成功写入BookJson" << endl;
+    // 判断Books是否为空
+    if (!Books.empty())
     {
-        //
-        BookFile.seekp(0, ios::beg);
-        BookFile.clear();
-        BookFile << BookJson.dump(4);
-        BookFile.flush();
+        Books.clear();
         if (Mode)
-            cout << "Book.json 保存完成" << endl;
+            cout << "成功清空Books" << endl;
     }
+
+    for (auto &theBook : BookJson["Books"]) // 读取BookJson中的每个元素
+    {
+        Book NewBook;
+        int id = theBook["ID"];
+        string name = theBook["Name"];
+        string bookCode = theBook["ISBN/ISSN"];
+        string author = theBook["Author"];
+        string publisher = theBook["Publisher"];
+        string language = theBook["Language"];
+        int edition = theBook["Edition"];
+        int publicationYear = theBook["PublicationYear"];
+        int publicationMonth = theBook["PublicationMonth"];
+        string introduction = theBook["Introduction"];
+        int borrowTimes = theBook["BorrowTimes"];
+        int total = theBook["Total"];
+        int current = theBook["Current"];
+        double price = theBook["Price"];
+        string originalName = "无";
+        string originalAuthor = "无";
+        if (theBook.contains("OriginalName"))
+            originalName = theBook["OriginalName"];
+        if (theBook.contains("OriginalAuthor"))
+            originalAuthor = theBook["OriginalAuthor"];
+        if (Mode)
+            cout << "成功读取一个Book数据" << endl;
+        NewBook.setId(id);
+        NewBook.setName(name);
+        NewBook.setBookCode(bookCode);
+        NewBook.setAuthor(author);
+        NewBook.setPublisher(publisher);
+        NewBook.setLanguage(language);
+        NewBook.setEdition(edition);
+        NewBook.setPublicationYear(publicationYear);
+        NewBook.setPublicationMonth(publicationMonth);
+        NewBook.setIntroduction(introduction);
+        NewBook.setBorrowTimes(borrowTimes);
+        NewBook.setTotal(total);
+        NewBook.setCurrent(current);
+        NewBook.setPrice(price);
+        NewBook.setOriginalName(originalName);
+        NewBook.setOriginalAuthor(originalAuthor);
+        if (Mode)
+            cout << "成功设置Book对象属性" << endl;
+
+        if (Mode)
+            cout << "成功构造Book对象" << endl;
+        Books.insert(make_pair(bookCode, NewBook)); // 使用bookCode作为键
+        if (Mode)
+            cout << "成功添加Book对象" << endl;
+    }
+}
+
+void SaveBooks(bool Mode)
+{
+    ofstream outfile("../data/Book.json", ios::trunc);
+    if (!outfile.is_open())
+    {
+        cout << "文件打开失败" << endl;
+        perror("Error opening file"); // 添加此行以输出系统错误信息
+        return;
+    }
+    // 进行排序
+    vector<Book> bookVector;
+    for (auto &book : Books)
+    {
+        bookVector.push_back(book.second);
+    }
+    sort(bookVector.begin(), bookVector.end(), [](Book &a, Book &b)
+         { return a.getId() < b.getId(); });
+    json BookJson;
+    // 遍历bookVector数组，将每个Book对象转换为json格式并添加到BookJson中
+    for (auto &bookPair : bookVector)
+    {
+        json tempBook;
+        tempBook["Name"] = bookPair.getName();
+        tempBook["ISBN/ISSN"] = bookPair.getBookCode();
+        tempBook["Author"] = bookPair.getAuthor();
+        tempBook["Publisher"] = bookPair.getPublisher();
+        tempBook["Language"] = bookPair.getLanguage();
+        tempBook["Edition"] = bookPair.getEdition();
+        tempBook["PublicationYear"] = bookPair.getPublicationYear();
+        tempBook["PublicationMonth"] = bookPair.getPublicationMonth();
+        tempBook["Introduction"] = bookPair.getIntroduction();
+        tempBook["BorrowTimes"] = bookPair.getBorrowTimes();
+        tempBook["Total"] = bookPair.getTotal();
+        tempBook["Current"] = bookPair.getCurrent();
+        tempBook["Price"] = bookPair.getPrice();
+        tempBook["OriginalName"] = bookPair.getOriginalName();
+        tempBook["OriginalAuthor"] = bookPair.getOriginalAuthor();
+        tempBook["ID"] = bookPair.getId();
+        BookJson["Books"].push_back(tempBook); // 使用bookCode作为键
+    }
+    outfile << BookJson.dump(4);
+    outfile.close();
 }

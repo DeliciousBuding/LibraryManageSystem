@@ -8,8 +8,8 @@ using namespace std;
 
 
 
-void AdminMenu(User &NowUser);
-void ReaderMenu(User &NowUser);
+void AdminMenu(User *NowUser);
+void ReaderMenu(User *NowUser);
 
 void Login();
 void Register();

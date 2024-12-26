@@ -3,15 +3,16 @@ using namespace std;
 void Login()
 {
     cout << endl;
+    CreateUsers();
+    // SaveUsers(1);
     string username, password;
     cout << "登录" << endl
          << "请输入您的账号和密码：" << endl;
     cin >> username >> password;
-    
-    User tempUser(username);
-    if(tempUser.getPassword() == password)
+    User *tempUser = GetUserByName(username);
+    if (tempUser->getPassword() == password)
     {
-        if(tempUser.getType() == 1)
+        if (tempUser->getType() == 1)
         {
             // 管理员
             AdminMenu(tempUser);
@@ -30,17 +31,25 @@ void Login()
 }
 void Register()
 {
+    CreateUsers();
     cout << endl;
     string username, password;
     cout << "注册" << endl
          << "请输入您的账号和密码：" << endl;
     cin >> username >> password;
-    User temp(username);
-    temp.setPassword(password);
-    temp.setType(2);
-    temp.save();
+    User *tempUser = GetUserByName(username);
+    if (tempUser != NULL)
+    {
+        cout << endl;
+        cout << "账号已存在，请重新输入" << endl;
+    }
+    else
+    {
+        RegisterUser(username, password);
+        cout << "注册成功，请登录" << endl;
+    }
 }
-void AdminMenu(User &NowUser)
+void AdminMenu(User *NowUser)
 {
     // 读者用户管理：支持对读者的账号进行增、删、改、查；重置读者默认密码为123456；
     // 书籍信息管理：支持对馆藏图书进行增、删、改、查；
@@ -71,7 +80,7 @@ void AdminMenu(User &NowUser)
         }
     }
 }
-void ReaderMenu(User &NowUser)
+void ReaderMenu(User *NowUser)
 {
     // 读者可以查看自己的借阅记录
     // 读者可以搜索图书
@@ -95,7 +104,7 @@ void ReaderMenu(User &NowUser)
         {
         case 1:
             // 查看借阅记录
-            NowUser.ShowRecords();
+            NowUser->ShowRecords();
             break;
         case 2:
             // 搜索图书
@@ -105,10 +114,17 @@ void ReaderMenu(User &NowUser)
             break;
         case 4:
             // 借、还图书
+            cout << endl;
+            cout << "借阅记录:" << endl;
+            NowUser->ShowRecords();
+            cout << endl;
+            cout << "1.借阅书籍" << endl;
+            cout << "2.归还书籍" << endl;
+
             break;
         case 5:
             // 修改密码
-            NowUser.ModifyPassword();
+
             break;
         case 6:
             exitOfReaderMenu = true;
@@ -116,4 +132,3 @@ void ReaderMenu(User &NowUser)
         }
     }
 }
-

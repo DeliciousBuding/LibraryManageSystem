@@ -1,8 +1,6 @@
-#include "User.h"
 #include "UserSystem.h"
 
-vector<User> Users; // 在这里定义 Users
-
+unordered_map<string, User> Users;
 void UserManagerMenu() // 管理员用户管理菜单
 {
     bool exitOfUserManagerMenu = 0;
@@ -19,7 +17,6 @@ void UserManagerMenu() // 管理员用户管理菜单
         cout << "请输入你的选择:";
         int chooseOfUserManagerMenu;
         cin >> chooseOfUserManagerMenu;
-        LoadUsers();
         switch (chooseOfUserManagerMenu)
         {
         case 1:
@@ -46,57 +43,20 @@ void UserManagerMenu() // 管理员用户管理菜单
         }
     }
 }
-
-void LoadUsers()
-{
-    if (Users.empty())
-    {
-        open();
-        load();
-        if (!UserJson.is_null() && UserJson.is_object())
-        {
-            // cout << "UserJson 内容：" << UserJson.dump(4) << endl; // 输出 JSON 内容
-            cout << endl;
-            for (auto &i : UserJson.items())
-            {
-                if (!i.value().is_null())
-                {
-                    string ID = i.key();
-                    if (ID == "NumberOfUsers")
-                        continue;
-                    cout << "正在加载用户 ID: " << ID << endl; // 输出正在加载的用户 ID
-                    try
-                    {
-                        Users.push_back(User(i.value(), ID));
-                    }
-                    catch (const std::exception &e)
-                    {
-                        cerr << "加载用户 ID " << ID << " 时发生错误: " << e.what() << endl;
-                    }
-                }
-                else
-                {
-                    cerr << "警告: UserJson 中包含 null 值，跳过该项。" << endl;
-                }
-            }
-        }
-        else
-        {
-            cerr << "警告: UserJson 为空或不是对象类型。" << endl;
-        }
-        close();
-    }
-}
-
 void PrintUsers()
 {
     cout << endl;
     cout << "用户列表:" << endl;
-    cout << endl;
     for (auto &i : Users)
-        i.ShowInfo();
+    {
+        cout << endl;
+        i.second.ShowInfo();
+        // cout << "用户ID:" << i.second.getID() << endl;
+        // cout << "用户名:" << i.second.getName() << endl;
+        // cout << "用户类型:" << i.second.getType() << endl;
+    }
+    cout << endl;
 }
-
 void SearchUser()
 {
     bool exitOfSearchUser = 0;
@@ -115,16 +75,21 @@ void SearchUser()
         case 1:
         {
             cout << "请输入用户ID：";
-            string tempID;
+            int tempID;
             cin >> tempID;
-            for (auto &i : Users)
+            for (auto &it : Users)
             {
-                if (i.getID() == tempID)
+                if (it.second.getID() == tempID)
                 {
-                    i.ShowInfo();
+                    it.second.ShowInfo();
+                }
+                else
+                {
+                    cout << "未找到该用户" << endl;
                     break;
                 }
             }
+
             break;
         }
         case 2:
@@ -134,9 +99,13 @@ void SearchUser()
             cin >> tempName;
             for (auto &i : Users)
             {
-                if (i.getName() == tempName)
+                if (i.second.getName() == tempName)
                 {
-                    i.ShowInfo();
+                    i.second.ShowInfo();
+                }
+                else
+                {
+                    cout << "未找到该用户" << endl;
                     break;
                 }
             }
@@ -150,11 +119,28 @@ void SearchUser()
         }
     }
 }
-
+int GetNewID()
+{
+    int maxID = 0;
+    for (auto &i : Users)
+    {
+        if (i.second.getID() > maxID)
+        {
+            maxID = i.second.getID();
+        }
+    }
+    return maxID + 1;
+}
+void RegisterUser(string &name, string &password)
+{
+    User NewUser(GetNewID(), name, password, 1);
+    Users.insert(make_pair(name, NewUser));
+    SaveUsers();
+}
 void AddUser()
 {
     cout << endl;
-    cout << "用户信息添加：" << endl;
+    cout << "用户添加：" << endl;
 
     string tempName;
     bool exitOfAddUser = 0;
@@ -165,11 +151,14 @@ void AddUser()
         int flag = 1;
         for (auto &i : Users)
         {
-            if (i.getName() == tempName)
+            if (i.second.getName() == tempName)
             {
-                cout << "用户名已存在" << endl;
+                cout << "用户名已存在，请重新输入" << endl;
                 flag = 0;
-                break;
+            }
+            else
+            {
+                flag = 1;
             }
         }
         if (flag)
@@ -183,37 +172,14 @@ void AddUser()
     cout << "请输入用户类型：(1.管理员 2.读者)";
     int tempType;
     cin >> tempType;
-    // 获得用户ID
-    string tempID = to_string(Users.size() + 1);
-    // 判断是否重复
-    int flag = 1;
-    while (flag)
-    {
-        int a = 0;
-        for (auto &i : Users)
-        {
-            if (i.getID() == tempID)
-            {
-                a = 1;
-                break;
-            }
-        }
-        if (a == 0)
-        {
-            flag = 0;
-        }
-        else
-        {
-            tempID = to_string(stoi(tempID) + 1);
-        }
-    }
-    User tempUser(tempID, tempName, tempPassword, tempType);
-    Users.push_back(tempUser);
+    User NewUser(GetNewID(), tempName, tempPassword, tempType);
+    Users.insert(make_pair(tempName, NewUser));
+    SaveUsers();
 }
 
 void ModifyUser()
 {
-    bool exitOfModifyUser = 0;
+    bool exitOfModifyUser = false;
     while (!exitOfModifyUser)
     {
         cout << endl;
@@ -223,41 +189,25 @@ void ModifyUser()
         cout << "3.返回上一级菜单" << endl;
         cout << "请输入你的选择：";
         int chooseOfModifyUser;
+        User *tempUser = nullptr;
         cin >> chooseOfModifyUser;
         switch (chooseOfModifyUser)
         {
         case 1:
         {
             cout << "请输入用户ID：";
-            string tempID;
+            int tempID;
             cin >> tempID;
-            for (auto &i : Users)
-            {
-                if (i.getID() == tempID)
-                {
-                    cout << "请输入新的用户名：";
-                    string tempName;
-                    cin >> tempName;
-                    cout << "请输入新的密码：";
-                    string tempPassword;
-                    cin >> tempPassword;
-                    i.setName(tempName);
-                    i.setPassword(tempPassword);
+            tempUser = FindUserByID(tempID);
 
-                    cout << "请输入新的用户类型：(1.管理员 2.读者):";
-                    int tempType;
-                    cin >> tempType;
-                    i.setType(tempType);
-                    i.ShowInfo();
-                    cout << "修改成功" << endl;
-                    // 将对象保存到数据流UserJson中
-                    UserJson[tempID]["name"] = tempName;
-                    UserJson[tempID]["password"] = tempPassword;
-                    UserJson[tempID]["type"] = tempType;
-                    i.open();
-                    i.save();
-                    i.close();
-                }
+            if (tempUser != nullptr)
+            {
+                cout << "找到用户：" << tempUser->getName() << endl;
+                ModifyUserInfo(tempUser); // 修改: 使用解引用指针
+            }
+            else
+            {
+                cout << "未找到该用户" << endl;
             }
             break;
         }
@@ -266,89 +216,275 @@ void ModifyUser()
             cout << "请输入用户名：";
             string tempName;
             cin >> tempName;
-            for (auto &i : Users)
-            {
-                if (i.getName() == tempName)
-                {
-                    string tempID = i.getID();
-                    cout << "请输入新的用户名：";
-                    string tempName;
-                    cin >> tempName;
-                    cout << "请输入新的密码：";
-                    string tempPassword;
-                    cin >> tempPassword;
-                    i.setName(tempName);
-                    i.setPassword(tempPassword);
+            tempUser = FindUserByName(tempName);
 
-                    cout << "请输入新的用户类型：(1.管理员 2.读者):";
-                    int tempType;
-                    cin >> tempType;
-                    i.setType(tempType);
-                    i.ShowInfo();
-                    cout << "修改成功" << endl;
-                    // 将对象保存到数据流UserJson中
-                    UserJson[tempID]["name"] = tempName;
-                    UserJson[tempID]["password"] = tempPassword;
-                    UserJson[tempID]["type"] = tempType;
-                    i.open();
-                    //cout << UserJson;
-                    i.save();
-                    i.close();
-                }
+            if (tempUser != nullptr)
+            {
+                cout << "找到用户：" << tempUser->getName() << endl;
+                ModifyUserInfo(tempUser); // 修改: 使用解引用指针
             }
+            else
+            {
+                cout << "未找到该用户" << endl;
+            }
+            break;
         }
         case 3:
-            exitOfModifyUser = 1;
+            exitOfModifyUser = true;
             break;
         default:
-        {
             cout << "输入错误，请重新输入" << endl;
             break;
         }
+    }
+}
+void ModifyUserInfo(User *tempUser)
+{
+    bool exitOfModifyUserInfo = false;
+    while (!exitOfModifyUserInfo)
+    {
+        cout << endl;
+        cout << "用户信息修改";
+        tempUser->ShowInfo();
+        cout << endl;
+        cout << "1.修改用户名" << endl;
+        cout << "2.修改密码" << endl;
+        cout << "3.修改用户类型" << endl;
+        cout << "4.返回上一级菜单" << endl;
+        cout << "请输入你的选择：";
+        int chooseOfModifyUserInfo;
+        cin >> chooseOfModifyUserInfo;
+        switch (chooseOfModifyUserInfo)
+        {
+        case 1:
+        {
+            cout << "请输入新用户名：";
+            string tempName;
+            cin >> tempName;
+            tempUser->setName(tempName);
+            break;
         }
+        case 2:
+        {
+            cout << "请输入新密码：";
+            string tempPassword;
+            cin >> tempPassword;
+            tempUser->setPassword(tempPassword);
+        }
+        case 3:
+        {
+            cout << "请输入新用户类型：";
+            int tempType;
+            cin >> tempType;
+            tempUser->setType(tempType);
+        }
+        case 4:
+            exitOfModifyUserInfo = true;
+            break;
+        default:
+            cout << "输入错误，请重新输入" << endl;
+            break;
+        }
+        SaveUsers();
     }
 }
 
 void DeleteUser()
 {
-}
-
-void open()
-{
-    // 打开User.json
-    if (!UserFile.is_open())
-        UserFile.open("../data/User.json", ios::in | ios::out);
-    if (!UserFile.is_open())
-        cerr << "无法打开文件 User.json" << endl;
-}
-
-void close()
-{
-    // 关闭文件
-    if (UserFile.is_open())
-        UserFile.close();
-}
-
-void save()
-{
-    // 保存数据到User.json
-    if (UserFile.is_open())
-        UserFile << UserJson.dump(4);
-}
-
-void load()
-{
-    // 读取数据到User_json
-    if (UserFile.is_open())
+    bool exitOfDeleteUser = false;
+    while (!exitOfDeleteUser)
     {
-        UserFile.seekg(0);                                   // 移动到文件开头
-        if (UserFile.peek() == ifstream::traits_type::eof()) // 检查文件是否为空
+        cout << endl;
+        cout << "用户删除：" << endl;
+        cout << "1.按用户ID删除" << endl;
+        cout << "2.按用户名删除" << endl;
+        cout << "3.返回上一级菜单" << endl;
+        cout << "请输入你的选择：";
+        int chooseOfDeleteUser;
+        cin >> chooseOfDeleteUser;
+        switch (chooseOfDeleteUser)
         {
-            UserJson = json::object(); // 初始化为空对象
+        case 1:
+        {
+            cout << "请输入用户ID：";
+            int tempID;
+            cin >> tempID;
+            User *tempUser = FindUserByID(tempID);
+            if (tempUser != nullptr)
+            {
+                cout << "找到用户：" << tempUser->getName() << endl;
+                Users.erase(tempUser->getName());
+                SaveUsers();
+            }
         }
-        else
+        case 2:
         {
-            UserFile >> UserJson;
+            cout << "请输入用户名：";
+            string tempName;
+            cin >> tempName;
+            User *tempUser = FindUserByName(tempName);
+            if (tempUser != nullptr)
+            {
+                cout << "找到用户：" << tempUser->getName() << endl;
+                Users.erase(tempUser->getName());
+                SaveUsers();
+            }
+        }
+        case 3:
+            exitOfDeleteUser = true;
+            break;
+        default:
+            cout << "输入错误，请重新输入" << endl;
+            break;
         }
     }
+}
+
+void CreateUsers(bool Mode) // Mode为1时，输出调试信息
+{
+    ifstream infile("../data/User.json");
+    if (!infile.is_open())
+    {
+        cout << "文件打开失败" << endl;
+        perror("Error opening file"); // 添加此行以输出系统错误信息
+        return;
+    }
+    if (Mode)
+        cout << "文件打开成功" << endl;
+    json UserJson;
+    infile >> UserJson;
+    if (Mode)
+        cout << UserJson << endl;
+    infile.close();
+    if (Mode)
+        cout << "成功写入UserJson" << endl;
+    // 判断Users是否为空
+    if (Users.size() != 0)
+    {
+        Users.clear();
+        if (Mode)
+            cout << "成功清空Users" << endl;
+    }
+
+    for (auto &theUser : UserJson["Users"]) // 读取Users数组中的每个元素
+    {
+        if (Mode)
+            cout << theUser["id"] << endl;
+        int id = theUser["id"];
+        string name = theUser["name"];
+        string password = theUser["password"];
+        int type = theUser["type"];
+        vector<Record> tempRecords;
+        if (theUser.contains("records"))
+        {
+            for (auto &theRecord : theUser["records"]) // 读取records
+            {
+                tempRecords.push_back(Record(theRecord));
+                if (Mode)
+                    cout << theRecord << endl;
+            }
+        }
+        // 构造User对象并添加到Users中
+
+        User NewUser(id, name, password, type, tempRecords);
+        if (Mode)
+            cout << "成功构造User对象" << endl;
+        Users.insert(make_pair(name, NewUser));
+        if (Mode)
+            cout << "成功添加User对象" << endl;
+    }
+}
+
+// src/UserSystem.cpp
+bool cmpID(User &a, User &b)
+{
+    return a.getID() < b.getID();
+}
+void SaveUsers(bool Mode)
+{
+    ofstream outfile("../data/User.json", ios::trunc);
+    if (!outfile.is_open())
+    {
+        cout << "文件打开失败" << endl;
+        perror("Error opening file"); // 添加此行以输出系统错误信息
+        return;
+    }
+    json UserJson;
+
+    // 提取用户到 vector 中 便于排序
+    vector<User> userVector;
+    for (auto &user : Users)
+    {
+        userVector.push_back(user.second);
+    }
+
+    // 对 vector 中的用户按 id 进行排序
+    sort(userVector.begin(), userVector.end(), cmpID);
+
+    // 遍历排序后的用户数组，将每个 User 对象转换为 json 格式并添加到 UserJson 中
+    for (auto &user : userVector)
+    {
+        json tempUser;
+        tempUser["id"] = user.getID();
+        tempUser["name"] = user.getName();
+        tempUser["password"] = user.getPassword();
+        tempUser["type"] = user.getType();
+
+        if (user.getRecords().size() != 0)
+        {
+            json tempRecords;
+            for (auto &record : user.getRecords()) // 遍历 records 并添加到 tempRecords 中
+            {
+                json tempRecord;
+                tempRecord["BookCode"] = record.getBookCode();
+                tempRecord["BookID"] = record.getBookID();
+                tempRecord["BookReturn"] = record.getBookReturn();
+                tempRecord["BorrowTime"] = record.getBorrowTime();
+                tempRecord["ReturnTime"] = record.getReturnTime();
+                tempRecords.push_back(tempRecord);
+                if (Mode)
+                    cout << tempRecord << endl;
+            }
+            tempUser["records"] = tempRecords;
+        }
+
+        UserJson["Users"].push_back(tempUser);
+    }
+
+    outfile << UserJson.dump(4);
+    outfile.close();
+}
+
+User *GetUserByName(string name) // 通过用户名获取用户信息
+{
+    for (auto &i : Users)
+    {
+        if (i.second.getName() == name)
+        {
+            return &i.second;
+        }
+    }
+    return nullptr;
+}
+
+User *FindUserByID(int id)
+{
+    for (auto &i : Users)
+    {
+        if (i.second.getID() == id)
+        {
+            return &i.second;
+        }
+    }
+    return nullptr;
+}
+
+User *FindUserByName(const string &name)
+{
+    auto it = Users.find(name);
+    if (it != Users.end())
+    {
+        return &it->second;
+    }
+    return nullptr;
 }
