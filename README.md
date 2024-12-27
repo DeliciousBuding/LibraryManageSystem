@@ -7,7 +7,7 @@
 ## v4.7
 
 更新了最新图书的显示
-
+ 
 ## v4.6
 
 部分读取字符串使用`getline`而非`cin`，避免丢失空格的读取
@@ -133,6 +133,10 @@ feat(BookSystem): 实现图书系统的基础功能
 * 搭建最基本的文件框架 初步实现头文件和源码分离操作
 * 搭建起`LibrarySystem`类 `ReaderManager`和`UserManager`等等
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a67d30c1d261fbb8183d801c58620d373ae2fc99
 # 目录结构
 
 ├─data
