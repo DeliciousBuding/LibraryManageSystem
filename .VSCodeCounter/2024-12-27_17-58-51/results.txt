@@ -1,0 +1,113 @@
+Date : 2024-12-27 17:58:51
+Directory : c:\code\LibraryManageSystem
+Total : 64 files,  21389 codes, 4250 comments, 3012 blanks, all 28651 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| C++                |         56 |     19,387 |      4,248 |      2,922 |     26,557 |
+| JSON               |          5 |      1,713 |          0 |          0 |      1,713 |
+| Markdown           |          2 |        166 |          0 |         90 |        256 |
+| JSON with Comments |          1 |        123 |          2 |          0 |        125 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                    | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                       |         64 |     21,389 |      4,250 |      3,012 |     28,651 |
+| . (Files)                                                                               |          2 |        285 |          2 |         86 |        373 |
+| .vs                                                                                     |          3 |        149 |          0 |          0 |        149 |
+| .vs (Files)                                                                             |          2 |         10 |          0 |          0 |         10 |
+| .vs\LibraryManageSystem                                                                 |          1 |        139 |          0 |          0 |        139 |
+| .vs\LibraryManageSystem\v17                                                             |          1 |        139 |          0 |          0 |        139 |
+| data                                                                                    |          3 |      1,568 |          0 |          4 |      1,572 |
+| include                                                                                 |         50 |     17,849 |      4,212 |      2,858 |     24,919 |
+| include (Files)                                                                         |          5 |        201 |         23 |         38 |        262 |
+| include\nlohmann                                                                        |         45 |     17,648 |      4,189 |      2,820 |     24,657 |
+| include\nlohmann (Files)                                                                |          5 |      3,893 |      1,267 |        695 |      5,855 |
+| include\nlohmann\detail                                                                 |         38 |     11,715 |      2,899 |      1,983 |     16,597 |
+| include\nlohmann\detail (Files)                                                         |         11 |      1,690 |        478 |        297 |      2,465 |
+| include\nlohmann\detail\conversions                                                     |          3 |      1,289 |        547 |        228 |      2,064 |
+| include\nlohmann\detail\input                                                           |          6 |      4,773 |        941 |        709 |      6,423 |
+| include\nlohmann\detail\iterators                                                       |          6 |        871 |        300 |        186 |      1,357 |
+| include\nlohmann\detail\meta                                                            |          9 |        854 |        208 |        250 |      1,312 |
+| include\nlohmann\detail\meta (Files)                                                    |          7 |        844 |        194 |        238 |      1,276 |
+| include\nlohmann\detail\meta\call_std                                                   |          2 |         10 |         14 |         12 |         36 |
+| include\nlohmann\detail\output                                                          |          3 |      2,238 |        425 |        313 |      2,976 |
+| include\nlohmann\thirdparty                                                             |          2 |      2,040 |         23 |        142 |      2,205 |
+| include\nlohmann\thirdparty\hedley                                                      |          2 |      2,040 |         23 |        142 |      2,205 |
+| src                                                                                     |          6 |      1,538 |         36 |         64 |      1,638 |
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                | language           | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| c:\code\LibraryManageSystem\.vs\LibraryManageSystem\v17\DocumentLayout.json             | JSON               |        139 |          0 |          0 |        139 |
+| c:\code\LibraryManageSystem\.vs\ProjectSettings.json                                    | JSON               |          3 |          0 |          0 |          3 |
+| c:\code\LibraryManageSystem\.vs\VSWorkspaceState.json                                   | JSON               |          7 |          0 |          0 |          7 |
+| c:\code\LibraryManageSystem\LibraryManageSystem.code-workspace                          | JSON with Comments |        123 |          2 |          0 |        125 |
+| c:\code\LibraryManageSystem\README.md                                                   | Markdown           |        162 |          0 |         86 |        248 |
+| c:\code\LibraryManageSystem\data\Book.json                                              | JSON               |      1,336 |          0 |          0 |      1,336 |
+| c:\code\LibraryManageSystem\data\User.json                                              | JSON               |        228 |          0 |          0 |        228 |
+| c:\code\LibraryManageSystem\data\User.md                                                | Markdown           |          4 |          0 |          4 |          8 |
+| c:\code\LibraryManageSystem\include\Book.h                                              | C++                |         63 |          1 |          5 |         69 |
+| c:\code\LibraryManageSystem\include\BookSystem.h                                        | C++                |         26 |          5 |          8 |         39 |
+| c:\code\LibraryManageSystem\include\LibrarySystem.h                                     | C++                |         22 |          3 |          5 |         30 |
+| c:\code\LibraryManageSystem\include\User.h                                              | C++                |         63 |          8 |         11 |         82 |
+| c:\code\LibraryManageSystem\include\UserSystem.h                                        | C++                |         27 |          6 |          9 |         42 |
+| c:\code\LibraryManageSystem\include\nlohmann\adl_serializer.hpp                         | C++                |         33 |         14 |          9 |         56 |
+| c:\code\LibraryManageSystem\include\nlohmann\byte_container_with_subtype.hpp            | C++                |         63 |         22 |         19 |        104 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\abi_macros.hpp                      | C++                |         72 |         11 |         18 |        101 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\conversions\from_json.hpp           | C++                |        427 |         21 |         50 |        498 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\conversions\to_chars.hpp            | C++                |        490 |        503 |        126 |      1,119 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\conversions\to_json.hpp             | C++                |        372 |         23 |         52 |        447 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\exceptions.hpp                      | C++                |        184 |         43 |         31 |        258 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\hash.hpp                            | C++                |         93 |         19 |         18 |        130 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\input\binary_reader.hpp             | C++                |      2,360 |        365 |        285 |      3,010 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\input\input_adapters.hpp            | C++                |        367 |         58 |         68 |        493 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\input\json_sax.hpp                  | C++                |        457 |        161 |        110 |        728 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\input\lexer.hpp                     | C++                |      1,199 |        262 |        173 |      1,634 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\input\parser.hpp                    | C++                |        372 |         83 |         65 |        520 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\input\position_t.hpp                | C++                |         18 |         12 |          8 |         38 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\iterators\internal_iterator.hpp     | C++                |         14 |         16 |          6 |         36 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\iterators\iter_impl.hpp             | C++                |        489 |        172 |         91 |        752 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\iterators\iteration_proxy.hpp       | C++                |        170 |         39 |         34 |        243 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\iterators\iterator_traits.hpp       | C++                |         42 |          9 |         11 |         62 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\iterators\json_reverse_iterator.hpp | C++                |         67 |         43 |         21 |        131 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\iterators\primitive_iterator.hpp    | C++                |         89 |         21 |         23 |        133 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\json_custom_base_class.hpp          | C++                |         15 |         17 |          8 |         40 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\json_pointer.hpp                    | C++                |        653 |        229 |        107 |        989 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\json_ref.hpp                        | C++                |         55 |          8 |         16 |         79 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\macro_scope.hpp                     | C++                |        389 |         49 |         45 |        483 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\macro_unscope.hpp                   | C++                |         31 |          9 |          6 |         46 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\meta\call_std\begin.hpp             | C++                |          5 |          7 |          6 |         18 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\meta\call_std\end.hpp               | C++                |          5 |          7 |          6 |         18 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\meta\cpp_future.hpp                 | C++                |         81 |         59 |         32 |        172 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\meta\detected.hpp                   | C++                |         47 |          8 |         16 |         71 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\meta\identity_tag.hpp               | C++                |          8 |          8 |          6 |         22 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\meta\is_sax.hpp                     | C++                |        128 |          7 |         25 |        160 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\meta\std_fs.hpp                     | C++                |         19 |          7 |          4 |         30 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\meta\type_traits.hpp                | C++                |        549 |         98 |        149 |        796 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\meta\void_t.hpp                     | C++                |         12 |          7 |          6 |         25 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\output\binary_writer.hpp            | C++                |      1,449 |        220 |        170 |      1,839 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\output\output_adapters.hpp          | C++                |        109 |         12 |         27 |        148 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\output\serializer.hpp               | C++                |        680 |        193 |        116 |        989 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\string_concat.hpp                   | C++                |        110 |          8 |         29 |        147 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\string_escape.hpp                   | C++                |         31 |         34 |          8 |         73 |
+| c:\code\LibraryManageSystem\include\nlohmann\detail\value_t.hpp                         | C++                |         57 |         51 |         11 |        119 |
+| c:\code\LibraryManageSystem\include\nlohmann\json.hpp                                   | C++                |      3,490 |      1,161 |        608 |      5,259 |
+| c:\code\LibraryManageSystem\include\nlohmann\json_fwd.hpp                               | C++                |         32 |         31 |         13 |         76 |
+| c:\code\LibraryManageSystem\include\nlohmann\ordered_map.hpp                            | C++                |        275 |         39 |         46 |        360 |
+| c:\code\LibraryManageSystem\include\nlohmann\thirdparty\hedley\hedley.hpp               | C++                |      1,891 |         16 |        139 |      2,046 |
+| c:\code\LibraryManageSystem\include\nlohmann\thirdparty\hedley\hedley_undef.hpp         | C++                |        149 |          7 |          3 |        159 |
+| c:\code\LibraryManageSystem\src\Book.cpp                                                | C++                |         39 |          1 |          2 |         42 |
+| c:\code\LibraryManageSystem\src\BookSystem.cpp                                          | C++                |        656 |          6 |         19 |        681 |
+| c:\code\LibraryManageSystem\src\LibrarySystem.cpp                                       | C++                |        299 |         16 |         13 |        328 |
+| c:\code\LibraryManageSystem\src\User.cpp                                                | C++                |         58 |          4 |          4 |         66 |
+| c:\code\LibraryManageSystem\src\UserSystem.cpp                                          | C++                |        448 |          9 |         20 |        477 |
+| c:\code\LibraryManageSystem\src\main.cpp                                                | C++                |         38 |          0 |          6 |         44 |
+| Total                                                                                   |                    |     21,389 |      4,250 |      3,012 |     28,651 |
++-----------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

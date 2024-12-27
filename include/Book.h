@@ -30,7 +30,8 @@ public:
     Book(string code);
     Book();
     void show();
-
+    
+    //getter and setter
     string getName() { return name; }
     void setName(string name) { this->name = name; }
     string getBookCode() { return bookCode; }
