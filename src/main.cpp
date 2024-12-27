@@ -15,6 +15,7 @@ int main()
         cout << "2.注册 " << endl;
         cout << "3.退出 " << endl;
         cout << "请选择：";
+        cin.clear();
         cin >> choiceOfMain;
 
         if (choiceOfMain != 1 && choiceOfMain != 2 && choiceOfMain != 3)

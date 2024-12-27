@@ -47,6 +47,7 @@ User *FindUser(bool Mode)
             cout << "输入错误，请重新输入" << endl;
         }
     }
+    return foundUser;
 }
 
 void UserManagerMenu() // 管理员用户管理菜单

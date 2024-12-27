@@ -181,7 +181,8 @@ Book *FindBook(bool Mode)
         cout << "1.按书名查找" << endl;
         cout << "2.按作者查找" << endl;
         cout << "3.按图书代码查找" << endl;
-        cout << "4.返回上一级菜单" << endl;
+        cout << "4.所有关键字查找" << endl;
+        cout << "5.返回上一级菜单" << endl;
         cout << "请输入您的选择: ";
         cin.clear();
 
@@ -192,13 +193,13 @@ Book *FindBook(bool Mode)
         {
         case 1:
         {
-            cout << "请输入书名: ";
+            cout << "请输入书名（模糊查找，支持原名）: ";
             string AbookName;
             getline(cin, AbookName);
             vector<Book> FoundBooks;
             for (auto &i : Books)
             {
-                if (i.second.getName() == AbookName)
+                if (i.second.getName().find(AbookName) != string::npos || i.second.getOriginalName().find(AbookName) != string::npos)
                 {
                     FoundBooks.push_back(i.second);
                 }
@@ -208,9 +209,9 @@ Book *FindBook(bool Mode)
                 int sum = 1;
                 for (auto &i : FoundBooks)
                 {
+                    cout << endl;
                     cout << "第 " << sum << " 本: " << endl;
                     i.show();
-                    cout << endl;
                     sum++;
                 }
                 if (Mode)
@@ -238,13 +239,13 @@ Book *FindBook(bool Mode)
         }
         case 2:
         {
-            cout << "请输入作者: ";
+            cout << "请输入作者（支持模糊查找）: ";
             string Author;
             getline(cin, Author);
             vector<Book> FoundBooks;
             for (auto &i : Books)
             {
-                if (i.second.getAuthor() == Author)
+                if (i.second.getAuthor().find(Author) != string::npos || i.second.getOriginalAuthor().find(Author) != string::npos)
                 {
                     FoundBooks.push_back(i.second);
                 }
@@ -306,9 +307,55 @@ Book *FindBook(bool Mode)
             }
             break;
         }
-        case 4:
+        case 5:
             exitOfFindBook = true;
             break;
+        case 4:
+        {
+            cout << "请输入特定关键字: ";
+            string AbookName;
+            getline(cin, AbookName);
+            vector<Book> FoundBooks;
+            for (auto &i : Books)
+            {
+                if (i.second.getName().find(AbookName) != string::npos || i.second.getOriginalName().find(AbookName) != string::npos || i.second.getAuthor().find(AbookName) != string::npos || i.second.getOriginalAuthor().find(AbookName) != string::npos || i.second.getBookCode().find(AbookName) != string::npos || i.second.getPublisher().find(AbookName) != string::npos || i.second.getLanguage().find(AbookName) != string::npos || i.second.getIntroduction().find(AbookName) != string::npos || i.second.getPublisher().find(AbookName) != string::npos || i.second.getBookCode().find(AbookName) != string::npos)
+                {
+                    FoundBooks.push_back(i.second);
+                }
+            }
+            if (!FoundBooks.empty())
+            {
+                int sum = 1;
+                for (auto &i : FoundBooks)
+                {
+                    cout << endl;
+                    cout << "第 " << sum << " 本: " << endl;
+                    i.show();
+                    sum++;
+                }
+                if (Mode)
+                {
+                    cout << "请输入要指定的图书序号: ";
+                    int choice;
+                    cin >> choice;
+                    cin.ignore(); // 忽略换行符
+                    if (choice > 0 && choice <= FoundBooks.size())
+                    {
+                        foundBook = &FoundBooks[choice - 1];
+                        exitOfFindBook = true;
+                    }
+                    else
+                    {
+                        cout << "无效的序号，请重新输入" << endl;
+                    }
+                }
+            }
+            else
+            {
+                cout << "搜索失败" << endl;
+            }
+            break;
+        }
         default:
             cout << "无效的选择，请重新输入" << endl;
             break;

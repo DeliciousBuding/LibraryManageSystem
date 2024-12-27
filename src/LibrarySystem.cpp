@@ -10,6 +10,11 @@ void Login()
          << "请输入您的账号和密码：" << endl;
     cin >> username >> password;
     User *tempUser = GetUserByName(username);
+    if (tempUser == nullptr)
+    {
+        cout << "账号不存在，请重新输入" << endl;
+        Login();
+    }
     if (tempUser->getPassword() == password)
     {
         if (tempUser->getType() == 1)
@@ -138,6 +143,10 @@ void ReaderMenu(User *NowUser)
                     ReturnBook(NowUser);
                     break;
                 case 3:
+                    exitOfBorrowReturn = true;
+                    break;
+                default:
+                    cout << "输入错误，请重新输入" << endl;
                     break;
                 }
             }
