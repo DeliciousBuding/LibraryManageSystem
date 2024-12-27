@@ -37,4 +37,6 @@ int GetNewID();
 User *FindUserByID(int id);
 User *FindUserByName(const string &name);
 
+User *FindUser(bool Mode = 0);
+
 #endif

@@ -211,6 +211,12 @@
             "name": "22",
             "password": "22",
             "type": 1
+        },
+        {
+            "id": 12,
+            "name": "UserNew",
+            "password": "1",
+            "type": 1
         }
     ]
 }

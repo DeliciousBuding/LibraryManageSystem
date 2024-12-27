@@ -167,6 +167,7 @@ void DeleteBook()
         cout << "删除成功" << endl;
     }
 }
+
 Book *FindBook(bool Mode)
 {
     bool exitOfFindBook = false;
@@ -175,28 +176,29 @@ Book *FindBook(bool Mode)
     while (!exitOfFindBook)
     {
         cout << endl;
+        int choiceOfFindbook = 0;
         cout << "查找图书菜单" << endl;
         cout << "1.按书名查找" << endl;
         cout << "2.按作者查找" << endl;
         cout << "3.按图书代码查找" << endl;
         cout << "4.返回上一级菜单" << endl;
         cout << "请输入您的选择: ";
-        int choice=0;
-        cin >> choice;
+        cin.clear();
+
+        cin >> choiceOfFindbook;
         cin.ignore(); // 忽略换行符，防止影响后续的 getline
 
-        switch (choice)
+        switch (choiceOfFindbook)
         {
         case 1:
         {
             cout << "请输入书名: ";
-            string Name;
-            getline(cin, Name);
+            string AbookName;
+            getline(cin, AbookName);
             vector<Book> FoundBooks;
             for (auto &i : Books)
             {
-                //cout<<i.second.getName()<<endl;
-                if (i.second.getName() == Name)
+                if (i.second.getName() == AbookName)
                 {
                     FoundBooks.push_back(i.second);
                 }
