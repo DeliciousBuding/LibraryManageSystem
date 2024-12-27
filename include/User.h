@@ -22,6 +22,9 @@ public:
         BorrowTime = j["BorrowTime"];
         ReturnTime = j["ReturnTime"];
     }
+    // 构造函数 新记录
+    Record(string BookCode, int BookID, bool BookReturn, string BorrowTime, string ReturnTime)
+        : BookCode(BookCode), BookID(BookID), BookReturn(BookReturn), BorrowTime(BorrowTime), ReturnTime(ReturnTime) {}
 
     // getter和setter接口
     string getBookCode() { return BookCode; }
@@ -34,6 +37,8 @@ public:
     void setBorrowTime(string BorrowTime) { this->BorrowTime = BorrowTime; }
     string getReturnTime() { return ReturnTime; }
     void setReturnTime(string ReturnTime) { this->ReturnTime = ReturnTime; }
+    // 显示借阅记录
+    void ShowRecord();
 };
 
 class User
@@ -65,13 +70,12 @@ public:
     void setType(int type) { this->type = type; }
     vector<Record> getRecords() { return Records; }
     void setRecords(vector<Record> Records) { this->Records = Records; }
-    
+
     // 显示用户信息
     void ShowInfo();
     void ShowRecords();
     // 添加借阅记录
     void AddRecord(Record Record);
-    
 };
 
 #endif

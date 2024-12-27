@@ -24,8 +24,11 @@ void BookManagerMenu();
 // 书籍管理功能函数
 void AddBook();
 void DeleteBook();
-void FindBook();
+Book *FindBook(bool Mode = 0); // 如果Mode为0，为正常搜索菜单，为1则会返回指定书的指针
 void ModifyBook();
-void ShowAllBooks();
+void ShowAllBooks(int Mode);
+void ShowBooks();
+// 书籍管理辅助函数
+Book *GetBookByCode(string BookCode);
 
 #endif
