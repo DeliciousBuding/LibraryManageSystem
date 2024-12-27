@@ -10,7 +10,6 @@
                 "-I${workspaceFolder}/include",
                 "-o",
                 "${workspaceFolder}/src/main.exe"
-                
             ],
             "problemMatcher": {
                 "owner": "cpp",
@@ -34,6 +33,7 @@
             "label": "C++(LibrarySystem专用)",
             "command": "C:\\mingw64\\bin\\g++.exe",
             "args": [
+                //"-fexec-charset=GBK",
                 "-fdiagnostics-color=always",
                 "-g",
                 "${workspaceFolder}/src/*.cpp",

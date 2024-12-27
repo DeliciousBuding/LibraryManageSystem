@@ -62,7 +62,7 @@ void AdminMenu(User *NowUser)
         cout << "2.书籍信息管理" << endl;
         cout << "3.退出" << endl;
         cout << "请输入你的选择:";
-        int choiceOfAdminMenu=0;
+        int choiceOfAdminMenu = 0;
         cin >> choiceOfAdminMenu;
         switch (choiceOfAdminMenu)
         {
@@ -96,7 +96,7 @@ void ReaderMenu(User *NowUser)
         cout << "6.修改密码" << endl;
         cout << "7.退出" << endl;
         cout << "请输入你的选择:";
-        int choiceOfReaderMenu=0;
+        int choiceOfReaderMenu = 0;
         cin >> choiceOfReaderMenu;
         switch (choiceOfReaderMenu)
         {
@@ -127,7 +127,7 @@ void ReaderMenu(User *NowUser)
                 cout << "2.归还书籍" << endl;
                 cout << "3.返回上一级菜单" << endl;
                 cout << "请输入你的选择:";
-                int choiceOfBorrowReturn=0;
+                int choiceOfBorrowReturn = 0;
                 cin >> choiceOfBorrowReturn;
                 switch (choiceOfBorrowReturn)
                 {
@@ -180,6 +180,7 @@ void ShowHotBooks()
     int sum = 0;
     for (auto &i : tempBooks) // 显示前10本热门图书
     {
+        cout << endl;
         i.show();
         sum++;
         if (sum > 10)
@@ -189,62 +190,52 @@ void ShowHotBooks()
 
 void BorrowBook(User *NowUser)
 {
-    bool exitOfBorrowBook = false;
-    while (!exitOfBorrowBook)
+
+    cout << endl;
+    cout << "图书借阅菜单" << endl;
+    Book *tempBook = FindBook(1);
+    if (tempBook == nullptr)
     {
-        cout << endl;
-        cout << "图书借阅菜单" << endl;
-        Book *tempBook = FindBook(1);
-        if (tempBook == nullptr)
-        {
-            cout << "未找到目标图书，请重新查找" << endl;
-            exitOfBorrowBook = true;
-            break;
-        }
-        else
-        {
-            // 新建借阅记录
-            Record tempRecord(tempBook->getBookCode(), tempBook->getId(), false, GetTimeNow(), "");
-            NowUser->AddRecord(tempRecord);
-            tempBook->setCurrent(tempBook->getCurrent() - 1);
-            tempBook->setBorrowTimes(tempBook->getBorrowTimes() + 1);
-            cout << "借阅成功" << endl;
-            cout << "您的本次借阅记录如下：" << endl;
-            tempRecord.ShowRecord();
-            break;
-        }
+        cout << "未找到目标图书，请重新查找" << endl;
     }
+    else
+    {
+        // 新建借阅记录
+        Record tempRecord(tempBook->getBookCode(), tempBook->getId(), false, GetTimeNow(), "");
+        NowUser->AddRecord(tempRecord);
+        tempBook->setCurrent(tempBook->getCurrent() - 1);
+        tempBook->setBorrowTimes(tempBook->getBorrowTimes() + 1);
+        cout << "借阅成功" << endl;
+        cout << "您的本次借阅记录如下：" << endl;
+        tempRecord.ShowRecord();
+    }
+
     SaveBooks();
 }
 void ReturnBook(User *NowUser)
 {
-    bool exitOfReturnBook = false;
-    while (!exitOfReturnBook)
+
+    cout << endl;
+    cout << "图书归还菜单" << endl;
+    Book *tempBook = FindBook(1);
+    if (tempBook == nullptr)
     {
-        cout << endl;
-        cout << "图书归还菜单" << endl;
-        Book *tempBook = FindBook(1);
-        if (tempBook == nullptr)
+        cout << "未找到目标图书，请重新查找" << endl;
+    }
+    else
+    {
+        for (auto &i : NowUser->getRecords())
         {
-            cout << "未找到目标图书，请重新查找" << endl;
-            exitOfReturnBook = true;
-            break;
-        }
-        else
-        {
-            for (auto &i : NowUser->getRecords())
+            if (i.getBookCode() == tempBook->getBookCode())
             {
-                if (i.getBookCode() == tempBook->getBookCode())
-                {
-                    i.setBookReturn(true);
-                    i.setReturnTime(GetTimeNow());
-                    tempBook->setCurrent(tempBook->getCurrent() + 1);
-                    cout << "归还成功" << endl;
-                    cout << "您的本次借阅记录如下：" << endl;
-                    i.ShowRecord();
-                }
-                break;
+                i.setBookReturn(true);
+                i.setReturnTime(GetTimeNow());
+                tempBook->setCurrent(tempBook->getCurrent() + 1);
+                cout << "归还成功" << endl;
+                cout << "您的本次借阅记录如下：" << endl;
+                i.ShowRecord();
             }
+            break;
         }
     }
 
@@ -296,5 +287,6 @@ bool ChangePassword(User *NowUser)
         return false;
     }
     NowUser->setPassword(newPassword);
+    SaveUsers();
     return true;
 }

@@ -6,6 +6,9 @@
 #include <fstream>
 #include <unordered_map>
 #include <iostream>
+#include <algorithm>
+#include <locale>
+#include <codecvt>
 #include <vector>
 
 using namespace std;
@@ -30,5 +33,7 @@ void ShowAllBooks(int Mode);
 void ShowBooks();
 // 书籍管理辅助函数
 Book *GetBookByCode(string BookCode);
+bool compareCN(const string &a, const string &b);
+
 
 #endif

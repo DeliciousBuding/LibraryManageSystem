@@ -1,6 +1,54 @@
 #include "UserSystem.h"
 
 unordered_map<string, User> Users;
+User *FindUser(bool Mode)
+{
+    bool exitOfFindUser = false;
+    User *foundUser = nullptr;
+    while (!exitOfFindUser)
+    {
+        cout << endl;
+        int chooseOfFindUser;
+        cout << "1.按用户ID查询" << endl;
+        cout << "2.按用户名查询" << endl;
+        cout << "3.返回上一级菜单" << endl;
+        cout << "请输入你的选择:";
+        cin >> chooseOfFindUser;
+        switch (chooseOfFindUser)
+        {
+        case 1:
+        {
+            cout << "请输入用户ID：";
+            int tempID;
+            cin >> tempID;
+            foundUser = FindUserByID(tempID);
+            if (foundUser != nullptr)
+            {
+                cout << "找到用户：" << foundUser->getName() << endl;
+                exitOfFindUser = true;
+            }
+        }
+        case 2:
+        {
+            cout << "请输入用户名：";
+            string tempName;
+            cin >> tempName;
+            foundUser = FindUserByName(tempName);
+            if (foundUser != nullptr)
+            {
+                cout << "找到用户：" << foundUser->getName() << endl;
+                exitOfFindUser = true;
+            }
+        }
+        case 3:
+            exitOfFindUser = true;
+            break;
+        default:
+            cout << "输入错误，请重新输入" << endl;
+        }
+    }
+}
+
 void UserManagerMenu() // 管理员用户管理菜单
 {
     bool exitOfUserManagerMenu = 0;
@@ -20,7 +68,7 @@ void UserManagerMenu() // 管理员用户管理菜单
         switch (chooseOfUserManagerMenu)
         {
         case 1:
-            SearchUser();
+            FindUser(0);
             break;
         case 2:
             ModifyUser();
@@ -57,68 +105,6 @@ void PrintUsers()
     }
     cout << endl;
 }
-void SearchUser()
-{
-    bool exitOfSearchUser = 0;
-    while (!exitOfSearchUser)
-    {
-        cout << endl;
-        cout << "用户信息查询：" << endl;
-        cout << "1.按用户ID查询" << endl;
-        cout << "2.按用户名查询" << endl;
-        cout << "3.返回上一级菜单" << endl;
-        cout << "请输入你的选择：";
-        int chooseOfSearchUser;
-        cin >> chooseOfSearchUser;
-        switch (chooseOfSearchUser)
-        {
-        case 1:
-        {
-            cout << "请输入用户ID：";
-            int tempID;
-            cin >> tempID;
-            for (auto &it : Users)
-            {
-                if (it.second.getID() == tempID)
-                {
-                    it.second.ShowInfo();
-                }
-                else
-                {
-                    cout << "未找到该用户" << endl;
-                    break;
-                }
-            }
-
-            break;
-        }
-        case 2:
-        {
-            cout << "请输入用户名：";
-            string tempName;
-            cin >> tempName;
-            for (auto &i : Users)
-            {
-                if (i.second.getName() == tempName)
-                {
-                    i.second.ShowInfo();
-                }
-                else
-                {
-                    cout << "未找到该用户" << endl;
-                    break;
-                }
-            }
-        }
-        case 3:
-            exitOfSearchUser = 1;
-            break;
-        default:
-            cout << "输入错误，请重新输入" << endl;
-            break;
-        }
-    }
-}
 int GetNewID()
 {
     int maxID = 0;
@@ -133,7 +119,7 @@ int GetNewID()
 }
 void RegisterUser(string &name, string &password)
 {
-    User NewUser(GetNewID(), name, password, 1);
+    User NewUser(GetNewID(), name, password, 2);
     Users.insert(make_pair(name, NewUser));
     SaveUsers();
 }
