@@ -16,6 +16,7 @@ void ReaderMenu(User *NowUser);
 // 读者面板区
 void SearchBook();
 void ShowHotBooks();
+void ShowNewBooks();
 void BorrowBook(User *NowUser);
 void ReturnBook(User *NowUser);
 

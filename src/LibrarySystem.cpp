@@ -96,10 +96,11 @@ void ReaderMenu(User *NowUser)
         cout << "1.查看借阅记录" << endl;
         cout << "2.搜索图书" << endl;
         cout << "3.查看热门图书" << endl;
-        cout << "4.借、还图书" << endl;
-        cout << "5.查看所有图书" << endl;
-        cout << "6.修改密码" << endl;
-        cout << "7.退出" << endl;
+        cout << "4.查看最新图书" << endl;
+        cout << "5.借、还图书" << endl;
+        cout << "6.查看所有图书" << endl;
+        cout << "7.修改密码" << endl;
+        cout << "8.退出" << endl;
         cout << "请输入你的选择:";
         int choiceOfReaderMenu = 0;
         cin >> choiceOfReaderMenu;
@@ -118,6 +119,10 @@ void ReaderMenu(User *NowUser)
             ShowHotBooks();
             break;
         case 4:
+            // 查看最新图书
+            ShowNewBooks();
+            break;
+        case 5:
         {
             bool exitOfBorrowReturn = false;
             while (!exitOfBorrowReturn)
@@ -152,13 +157,13 @@ void ReaderMenu(User *NowUser)
             }
             break;
         }
-        case 5:
+        case 6:
         {
             ShowBooks();
             break;
         }
 
-        case 6:
+        case 7:
             // 修改密码
             if (ChangePassword(NowUser))
             {
@@ -168,7 +173,7 @@ void ReaderMenu(User *NowUser)
             }
 
             break;
-        case 7:
+        case 8:
             exitOfReaderMenu = true;
             break;
         default:
@@ -298,4 +303,25 @@ bool ChangePassword(User *NowUser)
     NowUser->setPassword(newPassword);
     SaveUsers();
     return true;
+}
+void ShowNewBooks()
+{
+    vector<Book> tempBooks;
+    for (auto &i : Books)
+    {
+        tempBooks.push_back(i.second);
+    }
+    sort(tempBooks.begin(), tempBooks.end(), [](Book a, Book b)
+         { if(a.getPublicationYear() == b.getPublicationYear())
+            return a.getPublicationMonth() > b.getPublicationMonth();
+            return a.getPublicationYear() > b.getPublicationYear(); }); // 按id排序
+    int sum = 0;
+    for (auto &i : tempBooks) // 显示前10本最新图书
+    {
+        cout << endl;
+        i.show();
+        sum++;
+        if (sum > 10)
+            break;
+    }
 }

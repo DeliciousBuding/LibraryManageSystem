@@ -217,6 +217,12 @@
             "name": "UserNew",
             "password": "1",
             "type": 1
+        },
+        {
+            "id": 13,
+            "name": "NewUser",
+            "password": "1",
+            "type": 2
         }
     ]
 }
