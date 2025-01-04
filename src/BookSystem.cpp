@@ -542,12 +542,38 @@ void ShowAllBooks(int Mode)
         cout << "无效的排序模式" << endl;
         return;
     }
+    // 现在想要实现分页显示，即每次只显示一部分图书信息
+    int pageSize = 10;                                //
+    int pageCount = ceil(BookList.size() / pageSize); // 每页显示10条数据，总共需要多少页
 
+    for (int i = 0; i < pageCount; ++i)
+    {
+        cout << "第" << i + 1 << "页" << endl;
+        int start = i * pageSize;
+        int end = min((i + 1) * pageSize, static_cast<int>(BookList.size()));
+        for (int j = start; j < end; ++j)
+        {
+            BookList[j].show();
+            cout << endl;
+        }
+        cout << "------------------------" << endl;
+        cout << "按任意键继续，或输入'q'退出" << endl;
+        string c;
+        getline(cin, c);
+        if (c == "q")
+        {
+            break;
+        }
+        //cin.ignore();
+    }
+
+    /*
     for (auto &book : BookList)
     {
         book.show();
         cout << endl;
     }
+    */
 }
 
 Book *GetBookByCode(string BookCode)

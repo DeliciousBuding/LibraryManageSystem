@@ -4,7 +4,8 @@
 #include <string>
 
 #include <iostream>
-#include<iomanip>
+#include <iomanip>
+#include <string>
 using namespace std;
 class Book
 {
@@ -30,8 +31,8 @@ public:
     Book(string code);
     Book();
     void show();
-    
-    //getter and setter
+
+    // getter and setter
     string getName() { return name; }
     void setName(string name) { this->name = name; }
     string getBookCode() { return bookCode; }

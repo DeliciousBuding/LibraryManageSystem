@@ -8,10 +8,11 @@
       "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
       "args": [],
       "stopAtEntry": false,
-      "cwd": "${workspaceRoot}",
+      //"cwd": "${workspaceRoot}",
+      "cwd": "${fileDirname}",
       "environment": [],
       //"console": "integratedTerminal" 
-      "externalConsole": false,
+      "externalConsole": true,
       "MIMode": "gdb",
       "miDebuggerPath": "C:\\mingw64\\bin\\gdb.exe",
       "preLaunchTask": "g++",
